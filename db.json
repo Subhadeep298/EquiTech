@@ -1,0 +1,46 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "fullName": "John Doe",
+      "email": "johndoe@example.com",
+      "password": "password123",
+      "phoneNumber": "1234567890"
+    },
+    {
+      "id": "d9eb",
+      "fullName": "John Doe",
+      "email": "johndoe@example.com",
+      "password": "password123",
+      "phoneNumber": "1234567890"
+    },
+    {
+      "id": "0064",
+      "fullName": "Subhadeep Banerjee ",
+      "email": "Suabhabhaah@gmqik.com",
+      "password": "Syajfbuaiamfhajn",
+      "phoneNumber": "1234567890"
+    },
+    {
+      "id": "b10c",
+      "fullName": "Subhadeep Banerjee ",
+      "email": "Suabhabhaah@gmqik.com",
+      "password": "Syajfbuaiamfhajn",
+      "phoneNumber": "1234567892"
+    },
+    {
+      "id": "b3a2",
+      "fullName": "Subhadeep Banerjee ",
+      "email": "Suabhabhaah@gmqik.com",
+      "password": "Syajfbuaiamfhajn",
+      "phoneNumber": "1234567892"
+    },
+    {
+      "id": "1496",
+      "fullName": "Subhadeep Banerjee ",
+      "email": "subhadeepbanerjee298@gmail.com",
+      "password": "subha@123",
+      "phoneNumber": "5643217980"
+    }
+  ]
+}
