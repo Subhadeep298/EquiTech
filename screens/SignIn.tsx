@@ -6,7 +6,7 @@ import {
   TextInput,
   StyleSheet,
   ScrollView,
-  Image,
+  TouchableOpacity,
 } from "react-native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../utils/RootStackParamList";
@@ -18,6 +18,8 @@ import colors from "../utils/colors";
 import CustomButton from "../components/CustomButtons";
 import HomeButton from "../components/HomeButton";
 import axios from "axios";
+import { useAuthStore } from "../stores/authStore";
+import Icon from "react-native-vector-icons/Ionicons"; // Import the icon component
 
 // Zod Schema for form validation
 const loginSchema = z.object({
@@ -31,10 +33,11 @@ type SignInScreenNavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 const SignIn: React.FC = () => {
   const navigation = useNavigation<SignInScreenNavigationProp>();
+  const { isAuthenticated, login } = useAuthStore(); // Get Zustand state and actions
 
   const [focusedField, setFocusedField] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-
+  const [passwordVisible, setPasswordVisible] = useState(false); // State to toggle password visibility
 
   const {
     control,
@@ -44,31 +47,47 @@ const SignIn: React.FC = () => {
     resolver: zodResolver(loginSchema),
   });
 
+  const togglePasswordVisibility = () => {
+    setPasswordVisible((prevState) => !prevState);
+  };
+
   const onSubmit: SubmitHandler<LoginFormData> = async (data) => {
     try {
       const response = await axios.get(
         `http://192.168.1.13:3000/users?email=${data.email}&password=${data.password}`
       );
-
+      const user = response.data[0];
       if (response.data.length > 0) {
-        console.log('User signed in:', response.data[0]);
-        navigation.navigate("Home")
+        console.log("User signed in:", response.data[0]);
+        // Store the user data in Zustand
+        login({
+          id: user.id,
+          email: user.email,
+          fullName: user.fullName,
+          phoneNumber: user.phoneNumber,
+        });
+        navigation.reset({
+          index: 0,
+          routes: [{ name: "Home" }], // Set Home as the new initial route
+        });
       } else {
-        setErrorMessage('Invalid credentials. Please try again.'); // Set error message
+        setErrorMessage("Invalid credentials. Please try again.");
       }
     } catch (error) {
-      const errorMessage = axios.isAxiosError(error) ? error.response?.data || error.message : 'Unexpected error occurred';
-      console.error('Error:', errorMessage);
-      setErrorMessage('An error occurred. Please try again.'); // Set error message for other errors
+      const errorMessage = axios.isAxiosError(error)
+        ? error.response?.data || error.message
+        : "Unexpected error occurred";
+      console.error("Error:", errorMessage);
+      setErrorMessage("An error occurred. Please try again.");
     }
   };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-    <HomeButton imageSource={require('../assets/sucheta.png')} position="left" />
-    <HomeButton imageSource={require('../assets/logo.png')} />
+      <HomeButton imageSource={require("../assets/sucheta.png")} position="left" />
+      <HomeButton imageSource={require("../assets/logo.png")} />
 
-    <Text style={styles.title}>Welcome Back!</Text>
+      <Text style={styles.title}>Welcome Back!</Text>
       <Text style={styles.subtitle}>Login to your account</Text>
 
       {/* Email Input */}
@@ -83,7 +102,7 @@ const SignIn: React.FC = () => {
                 focusedField === "email" && styles.inputFocused,
               ]}
               placeholder="Email"
-              placeholderTextColor="gray" // Changed to gray
+              placeholderTextColor="gray"
               keyboardType="email-address"
               onBlur={() => {
                 onBlur();
@@ -99,20 +118,20 @@ const SignIn: React.FC = () => {
         )}
       />
 
-      {/* Password Input */}
+      {/* Password Input with Toggle */}
       <Controller
         control={control}
         name="password"
         render={({ field: { onChange, onBlur } }) => (
-          <View>
+          <View style={styles.passwordContainer}>
             <TextInput
               style={[
                 styles.input,
                 focusedField === "password" && styles.inputFocused,
               ]}
               placeholder="Password"
-              placeholderTextColor="gray" // Changed to gray
-              secureTextEntry
+              placeholderTextColor="gray"
+              secureTextEntry={!passwordVisible} // Toggle secureTextEntry based on password visibility
               onBlur={() => {
                 onBlur();
                 setFocusedField(null);
@@ -120,6 +139,16 @@ const SignIn: React.FC = () => {
               onFocus={() => setFocusedField("password")}
               onChangeText={onChange}
             />
+            <TouchableOpacity
+              style={styles.eyeIcon}
+              onPress={togglePasswordVisibility}
+            >
+              <Icon
+                name={passwordVisible ? "eye" : "eye-off"}
+                size={24}
+                color="gray"
+              />
+            </TouchableOpacity>
             {errors.password && (
               <Text style={styles.errorText}>{errors.password.message}</Text>
             )}
@@ -127,22 +156,19 @@ const SignIn: React.FC = () => {
         )}
       />
 
-{errorMessage && <Text style={styles.errorText}>{errorMessage}</Text>}
-
+      {errorMessage && <Text style={styles.errorText}>{errorMessage}</Text>}
 
       {/* Custom Button for Login */}
       <CustomButton
         text={isSubmitting ? "Logging in..." : "Login"}
         onPress={handleSubmit(onSubmit)}
-        color="#034B86" // Provide your button color
-        borderColor="#034B86" // Provide your border color
-        textColor="white" // Provide your text color
+        color="#034B86"
+        borderColor="#034B86"
+        textColor="white"
       />
 
       <Pressable onPress={() => navigation.navigate("SignUp")}>
-        <Text style={styles.loginText}>
-          Don't have an account? Go to Sign Up
-        </Text>
+        <Text style={styles.loginText}>Don't have an account? Go to Sign Up</Text>
       </Pressable>
     </ScrollView>
   );
@@ -171,17 +197,29 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   input: {
-    borderColor: "black", // Set a black border
+    borderColor: "black",
     borderWidth: 1,
     borderRadius: 8,
     padding: 10,
     marginBottom: 10,
-    width: 330, // Set width to 330
+    width: 330,
     color: colors.text,
   },
   inputFocused: {
-    borderColor: "#034B86", // Change this to your focused color
+    borderColor: "#034B86",
     borderBottomWidth: 5,
+  },
+  passwordContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    position: "relative",
+  },
+  eyeIcon: {
+    position: "absolute",
+    right: 10,
+    height: "100%",
+    paddingBottom: 10,
+    justifyContent: "center",
   },
   loginText: {
     color: colors.text,

@@ -1,13 +1,6 @@
 {
   "users": [
     {
-      "id": "1",
-      "fullName": "John Doe",
-      "email": "johndoe@example.com",
-      "password": "password123",
-      "phoneNumber": "1234567890"
-    },
-    {
       "id": "d9eb",
       "fullName": "John Doe",
       "email": "johndoe@example.com",
@@ -41,6 +34,13 @@
       "email": "subhadeepbanerjee298@gmail.com",
       "password": "subha@123",
       "phoneNumber": "5643217980"
+    },
+    {
+      "id": "2684",
+      "fullName": "Subhadeep ",
+      "email": "Ssnfis@gmail.com",
+      "password": "Shususmwka",
+      "phoneNumber": "1234567890"
     }
   ]
 }

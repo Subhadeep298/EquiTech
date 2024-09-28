@@ -17,8 +17,12 @@ export default function App() {
         screenOptions={{ headerShown: false }} // Hide header for all screens
       >
         <Stack.Screen name="Main" component={Main} />
-        <Stack.Screen name="SignIn" component={SignIn} />
-        <Stack.Screen name="SignUp" component={SignUp} />
+        <Stack.Screen name="SignIn" component={SignIn}  options={{
+    gestureEnabled: false, // Enable swipe back gesture for this screen
+  }}/>
+        <Stack.Screen name="SignUp" component={SignUp}  options={{
+    gestureEnabled: false, // Enable swipe back gesture for this screen
+  }}/>
         <Stack.Screen name="Home" component={Home} />
       </Stack.Navigator>
       <Footer />
