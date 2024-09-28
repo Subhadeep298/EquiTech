@@ -20,6 +20,7 @@ import CustomButton from "../components/CustomButtons";
 import HomeButton from "../components/HomeButton";
 import axios from "axios";
 import Icon from "react-native-vector-icons/Ionicons";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const registerSchema = z.object({
   fullName: z.string().min(1, "Full Name is required"),
@@ -86,11 +87,10 @@ const SignUp: React.FC = () => {
         imageSource={require("../assets/sucheta.png")}
         position="left"
       />
-      <HomeButton imageSource={require("../assets/logo.png")} />
+      <HomeButton imageSource={require("../assets/logo.png")}/>
 
       <Text style={styles.title}>Ready to take the next step?</Text>
       <Text style={styles.subtitle}>Create an Account</Text>
-
       {/* Full Name Input */}
       <Controller
         control={control}
@@ -226,6 +226,7 @@ const SignUp: React.FC = () => {
           Already have an account? Go to Login
         </Text>
       </Pressable>
+
     </ScrollView>
   );
 };

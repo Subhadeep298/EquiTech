@@ -8,16 +8,15 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import HomeButton from '../components/HomeButton';
 
 interface MainProps {
-    navigation: NativeStackNavigationProp<RootStackParamList, 'Main'>; // Add navigation prop
+    navigation: any; // Add navigation prop
 }
-
 
 export default function Main({ navigation }: MainProps) {
     
   return (
     <View style={styles.container}>
       {/* Home Button (Logo in the top right corner) */}
-      <HomeButton imageSource={require('../assets/logo.png')} />
+      <HomeButton imageSource={require('../assets/logo.png')}/>
 
       {/* Main Content */}
       <View style={styles.mainContent}>
@@ -27,8 +26,9 @@ export default function Main({ navigation }: MainProps) {
         <Text style={styles.tagline}>Building Equal Opportunities in Tech</Text>
         
         {/* Buttons */}
-        <CustomButton text="Sign in"  textColor="white" color="#034B86" borderColor="#034B86" onPress={() => navigation.navigate("SignIn")} />
-        <CustomButton text="Create an account" textColor="#034B86" color="white" borderColor="#034B86" onPress={() => navigation.navigate("SignUp")}/>
+        <CustomButton text="Sign in"  textColor="white" color="#034B86" borderColor="#034B86" onPress={() => navigation.navigate('SignUp')}
+ />
+        <CustomButton text="Create an account" textColor="#034B86" color="white" borderColor="#034B86" onPress={() => navigation.navigate("SignIn")}/>
       </View>
     </View>
   );

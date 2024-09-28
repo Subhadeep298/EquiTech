@@ -84,7 +84,7 @@ const SignIn: React.FC = () => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <HomeButton imageSource={require("../assets/sucheta.png")} position="left" />
+      <HomeButton imageSource={require("../assets/sucheta.png")} position="left"/>
       <HomeButton imageSource={require("../assets/logo.png")} />
 
       <Text style={styles.title}>Welcome Back!</Text>
@@ -210,9 +210,8 @@ const styles = StyleSheet.create({
     borderBottomWidth: 5,
   },
   passwordContainer: {
-    flexDirection: "row",
-    alignItems: "center",
     position: "relative",
+    marginBottom: 10, // Add some margin for consistency with other inputs
   },
   eyeIcon: {
     position: "absolute",
