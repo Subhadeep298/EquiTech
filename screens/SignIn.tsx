@@ -20,6 +20,7 @@ import HomeButton from "../components/HomeButton";
 import axios from "axios";
 import { useAuthStore } from "../stores/authStore";
 import Icon from "react-native-vector-icons/Ionicons"; // Import the icon component
+import Footer from "../components/Footer";
 
 // Zod Schema for form validation
 const loginSchema = z.object({
@@ -54,7 +55,7 @@ const SignIn: React.FC = () => {
   const onSubmit: SubmitHandler<LoginFormData> = async (data) => {
     try {
       const response = await axios.get(
-        `http://192.168.1.13:3000/users?email=${data.email}&password=${data.password}`
+        `http://192.168.1.8:3000/users?email=${data.email}&password=${data.password}`
       );
       const user = response.data[0];
       if (response.data.length > 0) {
@@ -83,6 +84,7 @@ const SignIn: React.FC = () => {
   };
 
   return (
+    <>
     <ScrollView contentContainerStyle={styles.container}>
       <HomeButton imageSource={require("../assets/sucheta.png")} position="left"/>
       <HomeButton imageSource={require("../assets/logo.png")} />
@@ -152,7 +154,9 @@ const SignIn: React.FC = () => {
             {errors.password && (
               <Text style={styles.errorText}>{errors.password.message}</Text>
             )}
+            
           </View>
+          
         )}
       />
 
@@ -171,6 +175,9 @@ const SignIn: React.FC = () => {
         <Text style={styles.loginText}>Don't have an account? Go to Sign Up</Text>
       </Pressable>
     </ScrollView>
+          <Footer />
+</>
+
   );
 };
 

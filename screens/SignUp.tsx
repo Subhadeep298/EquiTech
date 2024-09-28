@@ -21,6 +21,7 @@ import HomeButton from "../components/HomeButton";
 import axios from "axios";
 import Icon from "react-native-vector-icons/Ionicons";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Footer from "../components/Footer";
 
 const registerSchema = z.object({
   fullName: z.string().min(1, "Full Name is required"),
@@ -82,6 +83,7 @@ const SignUp: React.FC = () => {
   };
 
   return (
+    <>
     <ScrollView contentContainerStyle={styles.container}>
       <HomeButton
         imageSource={require("../assets/sucheta.png")}
@@ -228,6 +230,8 @@ const SignUp: React.FC = () => {
       </Pressable>
 
     </ScrollView>
+    <Footer/>
+    </>
   );
 };
 

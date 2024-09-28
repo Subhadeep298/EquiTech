@@ -6,8 +6,9 @@ import Main from './screens/Main';
 import SignIn from './screens/SignIn';
 import SignUp from './screens/SignUp';
 import Home from './screens/Home';
-import Footer from './components/Footer';
+import HireScreen from './screens/HireScreen';
 import colors from './utils/colors';
+import { StatusBar } from 'expo-status-bar';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -29,6 +30,7 @@ function DrawerNavigator() {
       <Drawer.Screen name="Home" component={Home} />
       <Drawer.Screen name="Log In" component={SignIn} />
       <Drawer.Screen name="Registration" component={SignUp} />
+      <Drawer.Screen name="Post a Job" component={HireScreen} />
     </Drawer.Navigator>
   );
 }
@@ -36,14 +38,17 @@ function DrawerNavigator() {
 // Main App Component
 export default function App() {
   return (
+    <>
+    {/* <StatusBar backgroundColor='white'/> */}
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Main" screenOptions={{ headerShown: false }}>
+        
         <Stack.Screen name="Main" component={Main} />
       <Stack.Screen name="SignIn" component={SignIn} />
       <Stack.Screen name="SignUp" component={SignUp} />
         <Stack.Screen name="Drawer" component={DrawerNavigator} />
       </Stack.Navigator>
-      <Footer />
     </NavigationContainer>
+    </>
   );
 }

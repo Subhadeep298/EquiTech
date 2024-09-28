@@ -11,14 +11,13 @@ const Footer: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-    footer: {
-        position: 'absolute',
-        bottom: 0,
-        width: '100%',
-        padding: 15,
-        backgroundColor: '#fafafa',
-        alignItems: 'center',
-      },      
+  footer: {
+    paddingVertical: 5,
+    backgroundColor: '#fafafa',
+    alignItems: 'center',
+    borderTopWidth: 1,
+    borderTopColor: '#ddd',
+  },      
   footerText: {
     color: '#666',
     fontSize: 12,

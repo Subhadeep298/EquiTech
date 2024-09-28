@@ -26,9 +26,9 @@ export default function Main({ navigation }: MainProps) {
         <Text style={styles.tagline}>Building Equal Opportunities in Tech</Text>
         
         {/* Buttons */}
-        <CustomButton text="Sign in"  textColor="white" color="#034B86" borderColor="#034B86" onPress={() => navigation.navigate('SignUp')}
+        <CustomButton text="Sign in"  textColor="white" color="#034B86" borderColor="#034B86" onPress={() => navigation.navigate('SignIn')}
  />
-        <CustomButton text="Create an account" textColor="#034B86" color="white" borderColor="#034B86" onPress={() => navigation.navigate("SignIn")}/>
+        <CustomButton text="Create an account" textColor="#034B86" color="white" borderColor="#034B86" onPress={() => navigation.navigate("SignUp")}/>
       </View>
     </View>
   );
