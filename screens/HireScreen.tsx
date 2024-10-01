@@ -15,14 +15,12 @@ const HireScreen: React.FC = () => {
   const [modalVisible, setModalVisible] = useState(false);
 
   const isAuthenticated = useAuthStore(state => state.isAuthenticated); // Get authentication status
-  const user = useAuthStore(state => state.user); // Get user info
-
   // Function to toggle modal visibility
   const toggleModal = () => {
     if (isAuthenticated) {
       setModalVisible(!modalVisible);
     } else {
-      navigation.navigate('SignIn'); // Navigate to SignIn if not authenticated
+      navigation.navigate("Drawer",{screen: "Login"}); 
     }
   };
 
@@ -33,13 +31,14 @@ const HireScreen: React.FC = () => {
 
       {/* Middle Section */}
       <View style={styles.middleContent}>
+      {!modalVisible &&
         <Text style={styles.hireText}>
           Let's hire your next great{' '}
           <Text style={styles.boldItalicText}>Female</Text>{' '}
           candidate.{' '}
           <Text style={styles.boldItalicText}>Fast.</Text>
         </Text>
-
+      }
         {/* Post Job Button */}
         <CustomButton
           text="Post a free job"

@@ -1,12 +1,12 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
 import Header from '../components/Header';
 import { useNavigation } from '@react-navigation/native';
 import SearchBar from '../components/SearchBar';
 import JobCard from '../components/JobCard';
 import axios from 'axios';
-import Footer from '../components/Footer';
 import colors from '../utils/colors';
+import JobDetailsModal from '../components/JobsDetails'; // Import your modal component
 
 interface Job {
   jobTitle: string;
@@ -15,22 +15,33 @@ interface Job {
   jobPay: string;
   employmentType: string;
   postedTime: string;
+  jobDescription: string; // Make sure to include the job description in the Job interface
+  keySkills: string[]; // Make sure to include key skills
+  jobType: string; // Add job type if it's part of the data
+  companyInfo: string; // Add company info if it's part of the data
+  hiringTrendsForWomen: string; // Add hiring trends if it's part of the data
+  companyCultureTowardsWomen: string; // Add company culture info if it's part of the data
+  benefitsForWomen: string; // Add benefits for women if it's part of the data
+  workMode: string; // Add work mode if it's part of the data
+  jobOpenings: number; // Add job openings if it's part of the dat
+  postedBy:number;
 }
-
 const Home: React.FC = () => {
   const navigation = useNavigation();
-
   const [jobs, setJobs] = useState<Job[]>([]);
+  const [filteredJobs, setFilteredJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(true);
-  const [page, setPage] = useState(1); // Start at page 1
   const [error, setError] = useState<string | null>(null);
-  const [jobsPerPage] = useState(3); // Control how many jobs to show per "page"
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [selectedJob, setSelectedJob] = useState<Job | null>(null);
+  const [keywordSearch, setKeywordSearch] = useState('');
+  const [locationSearch, setLocationSearch] = useState('');
 
-  // Fetch jobs once when component mounts
   const fetchJobs = async () => {
     try {
-      const response = await axios.get(`http://192.168.1.8:3000/jobs`); // Fetch all jobs
-      setJobs(response.data); // Store all jobs
+      const response = await axios.get('http://192.168.1.14:3000/jobs');
+      setJobs(response.data);
+      setFilteredJobs(response.data);
     } catch (error) {
       console.error("Error fetching job data:", error);
       setError("Failed to load jobs. Please try again.");
@@ -40,46 +51,80 @@ const Home: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchJobs(); // Call fetchJobs once when the component mounts
+    fetchJobs();
   }, []);
 
-  // Load more jobs by increasing the page and thus slicing more data
-  const loadMoreJobs = () => {
-    setPage(prevPage => {
-      // When the user reaches the end, reset back to 1
-      if (prevPage * jobsPerPage >= jobs.length) {
-        return 1; // Restart from the beginning
-      } else {
-        return prevPage + 1; // Otherwise, load next page
-      }
+  useEffect(() => {
+    const filtered = jobs.filter(job => {
+      if (!job) return false;
+      
+      const keywordMatch = 
+        (job.jobTitle?.toLowerCase().includes(keywordSearch.toLowerCase()) ?? false) ||
+        (job.companyName?.toLowerCase().includes(keywordSearch.toLowerCase()) ?? false) ||
+        (job.employmentType?.toLowerCase().includes(keywordSearch.toLowerCase()) ?? false);
+      
+      const locationMatch = 
+        job.location?.toLowerCase().includes(locationSearch.toLowerCase()) ?? false;
+
+      return keywordMatch && locationMatch;
     });
+    setFilteredJobs(filtered);
+  }, [keywordSearch, locationSearch, jobs]);
+
+  const handlePress = (job: Job) => {
+    setSelectedJob(job);
+    setIsModalVisible(true);
   };
 
-  // Only show jobs according to the current "page" (e.g., 10 jobs at a time)
-  const displayedJobs = jobs.slice(0, page * jobsPerPage);
+  const handleClose = () => {
+    setIsModalVisible(false);
+    setSelectedJob(null);
+  };
 
+  const handleApplyNow = () => {
+    console.log("Applying for job:", selectedJob);
+    // Implement your apply logic here
+  };
+
+  const loadMoreJobs = () => {
+    // This function should be implemented to fetch more jobs from the server
+    // For now, we'll just duplicate the existing jobs
+    setJobs(prevJobs => [...prevJobs, ...prevJobs]);
+  };
+  
   if (loading) {
     return <ActivityIndicator size="large" color="#034B86" style={styles.loadingIndicator} />;
   }
-
+  
+  if (error) {
+    return <Text>{error}</Text>;
+  }
   return (
     <View style={styles.container}>
       <Header navigation={navigation} />
       <View style={styles.content}>
         <View style={styles.searchBarWrapper}>
-          <SearchBar placeholder="Job title, keywords or company" iconName="search" />
+        <SearchBar
+            placeholder="Job title, keywords or company"
+            iconName="search"
+            value={keywordSearch}
+            onChangeText={setKeywordSearch}
+          />
           <View style={styles.separator} />
-          <SearchBar placeholder="Location" iconName="map-marker" />
+          <SearchBar
+            placeholder="Location"
+            iconName="map-marker"
+            value={locationSearch}
+            onChangeText={setLocationSearch}
+          />
         </View>
 
         <Text style={styles.sectionTitle}>Jobs for women</Text>
         <Text style={styles.subTitle}>Jobs based on your search on EquiTech</Text>
       </View>
 
-      {error && <Text style={styles.errorText}>{error}</Text>}
-
       <FlatList
-        data={displayedJobs} // Use the sliced jobs based on current page
+        data={filteredJobs}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item }) => (
           <JobCard
@@ -89,19 +134,27 @@ const Home: React.FC = () => {
             jobPay={item.jobPay}
             employmentType={item.employmentType}
             postedTime={item.postedTime}
+            onPress={() => handlePress(item)} // Pass the item to handlePress
           />
         )}
         contentContainerStyle={styles.cardsContainer}
-        ListFooterComponent={
-            <ActivityIndicator size="large" color="#034B86" />
-        }
-        onEndReached={loadMoreJobs} // Load more jobs when scrolling reaches the end
-        onEndReachedThreshold={0.1} // Threshold for triggering onEndReached
+        ListFooterComponent={<ActivityIndicator size="large" color="#034B86" />}
+    onEndReached={loadMoreJobs} // Load more jobs when reaching the end
+    onEndReachedThreshold={0.1} // Adjust threshold to avoid premature triggering
       />
+
+      {/* Job Details Modal */}
+      {selectedJob && (
+        <JobDetailsModal
+          jobData={selectedJob}
+          isVisible={isModalVisible}
+          onClose={handleClose}
+          onApplyNow={handleApplyNow} // Handle Apply Now button
+        />
+      )}
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,

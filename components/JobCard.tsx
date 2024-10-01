@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Pressable } from 'react-native';
+import { timeAgo } from '../utils/timeUtils';
 
 interface JobCardProps {
   jobTitle: string;
@@ -8,18 +9,24 @@ interface JobCardProps {
   jobPay: string;
   employmentType: string;
   postedTime: string;
+  onPress: (Job:any)=> void;
 }
 
-const JobCard: React.FC<JobCardProps> = ({ jobTitle, companyName, location, jobPay, employmentType, postedTime }) => {
+const JobCard: React.FC<JobCardProps> = ({ jobTitle, companyName, location, jobPay, employmentType, postedTime,onPress}) => {
+
+  const formattedPostedTime = timeAgo(postedTime);
+
   return (
-    <View style={styles.card}>
+    <Pressable onPress={onPress}>
+     <View style={styles.card}>
       <Text style={styles.jobTitle}>{jobTitle}</Text>
       <Text style={styles.companyName}>{companyName}</Text>
       <Text style={styles.location}>{location}</Text>
       <Text style={styles.pay}>{jobPay}</Text>
       <Text style={styles.employmentType}>{employmentType}</Text>
-      <Text style={styles.postedTime}>{postedTime}</Text>
+      <Text style={styles.postedTime}>{formattedPostedTime}</Text>
     </View>
+    </Pressable>
   );
 };
 

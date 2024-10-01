@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { RootStackParamList } from "../utils/RootStackParamList";
+import { DrawerParamList, RootStackParamList } from "../utils/RootStackParamList";
 import { useNavigation } from "@react-navigation/native";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import { z } from "zod";
@@ -30,11 +30,11 @@ const loginSchema = z.object({
 
 type LoginFormData = z.infer<typeof loginSchema>;
 
-type SignInScreenNavigationProp = NativeStackNavigationProp<RootStackParamList>;
+type SignInScreenNavigationProp = NativeStackNavigationProp<any>;
 
 const SignIn: React.FC = () => {
   const navigation = useNavigation<SignInScreenNavigationProp>();
-  const { isAuthenticated, login } = useAuthStore(); // Get Zustand state and actions
+  const { login } = useAuthStore(); // Get Zustand state and actions
 
   const [focusedField, setFocusedField] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -55,7 +55,7 @@ const SignIn: React.FC = () => {
   const onSubmit: SubmitHandler<LoginFormData> = async (data) => {
     try {
       const response = await axios.get(
-        `http://192.168.1.8:3000/users?email=${data.email}&password=${data.password}`
+        `http://192.168.1.14:3000/users?email=${data.email}&password=${data.password}`
       );
       const user = response.data[0];
       if (response.data.length > 0) {
@@ -64,8 +64,11 @@ const SignIn: React.FC = () => {
         login({
           id: user.id,
           email: user.email,
-          fullName: user.fullName,
+          name: user.name,
           phoneNumber: user.phoneNumber,
+          skills: user.skills,
+          workExperience: user.workExperience,
+          education: user.education,
         });
         navigation.reset({
           index: 0,
@@ -171,7 +174,7 @@ const SignIn: React.FC = () => {
         textColor="white"
       />
 
-      <Pressable onPress={() => navigation.navigate("SignUp")}>
+      <Pressable onPress={() => navigation.navigate("Drawer",{screen:"Registration"})}>
         <Text style={styles.loginText}>Don't have an account? Go to Sign Up</Text>
       </Pressable>
     </ScrollView>

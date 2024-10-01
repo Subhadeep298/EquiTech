@@ -24,13 +24,16 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Footer from "../components/Footer";
 
 const registerSchema = z.object({
-  fullName: z.string().min(1, "Full Name is required"),
+  name: z.string().min(1, "Full Name is required"),
   email: z.string().email("Invalid email address"),
   password: z.string().min(6, "Password must be at least 6 characters long"),
   phoneNumber: z
     .string()
     .length(10, "Phone number must be exactly 10 digits long")
     .regex(/^[0-9]+$/, "Phone number must contain only digits"),
+    skills: z.string().optional(),
+    workExperience: z.string().optional(),
+    education: z.string().optional()
 });
 
 type RegisterFormData = z.infer<typeof registerSchema>;
@@ -41,7 +44,7 @@ type RegisterScreenNavigationProp =
 const SignUp: React.FC = () => {
 
   const { isAuthenticated } = useAuthStore(); // Get Zustand state and actions
-  const navigation = useNavigation<RegisterScreenNavigationProp>();
+  const navigation = useNavigation<any>();
   const [focusedField, setFocusedField] = useState<string | null>(null);
   const [passwordVisible, setPasswordVisible] = useState(false); // State to toggle password visibility
 
@@ -65,12 +68,16 @@ const SignUp: React.FC = () => {
 
 
   const onSubmit: SubmitHandler<RegisterFormData> = async (data) => {
+
+    data.education="";
+    data.skills="";
+    data.workExperience="";
     try {
-      const response = await axios.post("http://192.168.1.13:3000/users", data);
+      const response = await axios.post("http://192.168.1.14:3000/users", data);
 
       if (response.status === 201) {
         console.log("User registered:", response.data[0]);
-        navigation.navigate("SignIn");
+       navigation.navigate("Drawer",{screen: "Login"});
       } else {
         console.error("Failed to register user.");
       }
@@ -96,13 +103,13 @@ const SignUp: React.FC = () => {
       {/* Full Name Input */}
       <Controller
         control={control}
-        name="fullName"
+        name="name"
         render={({ field: { onChange, onBlur } }) => (
           <View>
             <TextInput
               style={[
                 styles.input,
-                focusedField === "fullName" && styles.inputFocused,
+                focusedField === "name" && styles.inputFocused,
               ]}
               placeholder="Full Name"
               placeholderTextColor="gray" // Changed to gray
@@ -110,11 +117,11 @@ const SignUp: React.FC = () => {
                 onBlur();
                 setFocusedField(null);
               }}
-              onFocus={() => setFocusedField("fullName")}
+              onFocus={() => setFocusedField("name")}
               onChangeText={onChange}
             />
-            {errors.fullName && (
-              <Text style={styles.errorText}>{errors.fullName.message}</Text>
+            {errors.name && (
+              <Text style={styles.errorText}>{errors.name.message}</Text>
             )}
           </View>
         )}
@@ -223,7 +230,7 @@ const SignUp: React.FC = () => {
         textColor="white" // Provide your text color
       />
 
-      <Pressable onPress={() => navigation.navigate("SignIn")}>
+      <Pressable onPress={() => navigation.navigate('Drawer', { screen: 'Login' })}>
         <Text style={styles.loginText}>
           Already have an account? Go to Login
         </Text>
