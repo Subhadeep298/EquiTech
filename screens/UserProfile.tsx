@@ -30,6 +30,7 @@ const schema = z.object({
   workExperience: z.string().min(1, { message: "Work experience is required" }),
   education: z.string().min(1, { message: "Education is required" }),
   password: z.string().min(1, { message: "Password is required" }),
+  role: z.enum(['jobseeker', 'employer']).optional(),
 });
 
 const passwordSchema = z.object({
@@ -161,6 +162,7 @@ const UserProfile = () => {
       try {
         const response = await axios.put(`http://${your_json_url}/users/${user.id}`, {
           ...data,
+          ...userData, // Spread all existing fields (including role)
           password: userData?.password, // Preserve the existing password
         });
 

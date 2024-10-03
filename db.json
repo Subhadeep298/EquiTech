@@ -4,6 +4,7 @@
       "name": "s",
       "email": "s@gmail.com",
       "phoneNumber": "1234567890",
+      "role": "employer",
       "skills": "Sgjcndn",
       "workExperience": "Sujanndnnk",
       "education": "Enanmjjbobi",
@@ -11,26 +12,26 @@
       "id": "c83c"
     },
     {
-      "id": "de99",
       "name": "Subha ",
       "email": "s1@gmail.com",
-      "password": "123123",
       "phoneNumber": "5857512345",
+      "skills": "Ndna",
+      "workExperience": "Jsjks",
       "role": "jobseeker",
-      "education": "",
-      "skills": "",
-      "workExperience": ""
+      "education": "Dklsk",
+      "password": "123123",
+      "id": "de99"
     },
     {
-      "id": "b771",
       "name": "Manab",
       "email": "m@gmail.com",
-      "password": "123123",
       "phoneNumber": "8571452541",
-      "role": "employer",
-      "education": "",
       "skills": "",
-      "workExperience": ""
+      "workExperience": "",
+      "education": "",
+      "password": "123123",
+      "role": "employer",
+      "id": "b771"
     }
   ],
   "jobs": [
@@ -286,6 +287,22 @@
           "userId": "c83c",
           "resumeUri": "file:///data/user/0/host.exp.exponent/cache/DocumentPicker/fe33888e-3225-4753-be97-3cf9ea79a630.pdf",
           "coverLetterUri": "file:///data/user/0/host.exp.exponent/cache/DocumentPicker/914bb882-86f0-42f5-920e-4bc1ae613632.pdf"
+        },
+        {
+          "userId": "de99",
+          "resumeUri": "file:///data/user/0/host.exp.exponent/cache/DocumentPicker/a1592c63-e3c5-44f4-ac70-af172f735585.pdf",
+          "coverLetterUri": "file:///data/user/0/host.exp.exponent/cache/DocumentPicker/d28a6d47-612d-47f6-8059-7507ded480d4.pdf"
+        }
+      ]
+    },
+    {
+      "id": "6458",
+      "jobId": "2",
+      "applicants": [
+        {
+          "userId": "de99",
+          "resumeUri": "file:///data/user/0/host.exp.exponent/cache/DocumentPicker/40b5c96d-1ab9-4dca-824e-08a7358ab75e.pdf",
+          "coverLetterUri": "file:///data/user/0/host.exp.exponent/cache/DocumentPicker/5a31e652-c63d-4692-9f7e-2ab51b021f5f.pdf"
         }
       ]
     }

@@ -19,16 +19,19 @@ interface JobDetailsModalProps {
 const JobDetailsModal: React.FC<JobDetailsModalProps> = ({ jobData, isVisible, onClose }) => {
   const navigation = useNavigation<any>();
   const [isApplicationModalVisible, setIsApplicationModalVisible] = useState(false);
-  const { user, isAuthenticated, applyToJob, hasAppliedToJob,isJobSeeker } = useAuthStore();
+  const { user, isAuthenticated, applyToJob, hasAppliedToJob,isJobSeeker,fetchAppliedJobs } = useAuthStore();
   const userId = user?.id; // Extract user.id from Zustand
 
   const handleApplyNow = () => {
     setIsApplicationModalVisible(true);
   };
 
-  useEffect(()=>{
-    
-  })
+  useEffect(() => {
+    if (userId) {
+      // Fetch applied jobs again when the modal opens
+      useAuthStore.getState().fetchAppliedJobs(userId);
+    }
+  }, [userId]);
 
   const handleApplicationSubmit = async (resumeUri: string, coverLetterUri: string) => {
     try {

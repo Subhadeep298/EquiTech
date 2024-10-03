@@ -1,5 +1,7 @@
 import { create } from 'zustand';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import { your_json_url } from '../utils/url';
 
 interface User {
   id: string;
@@ -25,6 +27,7 @@ interface AuthState {
   hasAppliedToJob: (jobId: string) => boolean;
   setUser: (user: User) => void;
   setIsJobSeeker: (isJobSeeker: boolean) => Promise<void>;
+  fetchAppliedJobs: (userId: string) => Promise<void>;
 }
 
 export const useAuthStore = create<AuthState>((set, get) => ({
@@ -95,4 +98,14 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     // Update state
     set({ isJobSeeker });
   },
+
+  fetchAppliedJobs: async (userId: any) => {
+    try {
+      const response = await axios.get(`http://${your_json_url}/jobApplications?applicants.userId=${userId}`);
+      const appliedJobs = response.data.map((jobApplication: any) => jobApplication.jobId);
+      set({ appliedJobs });
+    } catch (error) {
+      console.error('Error fetching applied jobs:', error);
+    }
+  }
 }));
