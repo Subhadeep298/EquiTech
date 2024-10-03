@@ -15,6 +15,7 @@ import CustomButton from "../components/CustomButtons";
 import colors from "../utils/colors";
 import { useAuthStore } from "../stores/authStore";
 import axios from "axios";
+import { your_json_url } from "../utils/url";
 
 // Schema using Zod for form validation
 const jobPostSchema = z.object({
@@ -101,7 +102,7 @@ const JobPostForm: React.FC<JobPostModalProps> = ({ visible, onClose }) => {
   
     try {
       // Step 3: Make an API call to post the job using axios
-      const response = await axios.post("http://192.168.1.14:3000/jobs", jobData);
+      const response = await axios.post(`http://${your_json_url}/jobs`, jobData);
   
       if (response.status === 201) {
         // Step 4: Reset the form fields if the post was successful

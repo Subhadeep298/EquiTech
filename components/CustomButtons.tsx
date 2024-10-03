@@ -8,13 +8,15 @@ interface ButtonProps {
   textColor: string;
   onPress: any;
   width? : number;
+  disabled?: any;
 }
 
-const CustomButton: React.FC<ButtonProps> = ({ text, color, borderColor, onPress,textColor ,width=330}) => {
+const CustomButton: React.FC<ButtonProps> = ({ text, color, borderColor, onPress,textColor ,width=330, disabled=false }) => {
   return (
     <Pressable 
       style={[styles.button, { backgroundColor: color, borderColor: borderColor, width: width}]}
       onPress={onPress}
+      disabled = {disabled}
     >
       <Text style={[styles.buttonText,{color: textColor}]}>{text}</Text>
     </Pressable>

@@ -18,6 +18,7 @@ import axios from "axios"; // Import axios or your preferred library for API req
 import colors from "../utils/colors";
 import Header from "../components/Header";
 import { useNavigation } from "@react-navigation/native";
+import { your_json_url } from "../utils/url";
 
 // Define schema with zod
 const schema = z.object({
@@ -103,7 +104,7 @@ const UserProfile = () => {
   const updateUserProfile = async (data: FormData) => {
     if(user?.id)
     try {
-      const response = await axios.put(`http://192.168.1.14:3000/users/${user.id}`, data); // Update with your API endpoint
+      const response = await axios.put(`http://${your_json_url}/users/${user.id}`, data); // Update with your API endpoint
       if (response.status === 200) {
         alert("Profile updated!");
         setSubmittedData(data);

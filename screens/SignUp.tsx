@@ -22,6 +22,7 @@ import axios from "axios";
 import Icon from "react-native-vector-icons/Ionicons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Footer from "../components/Footer";
+import { your_json_url } from "../utils/url";
 
 const registerSchema = z.object({
   name: z.string().min(1, "Full Name is required"),
@@ -73,7 +74,7 @@ const SignUp: React.FC = () => {
     data.skills="";
     data.workExperience="";
     try {
-      const response = await axios.post("http://192.168.1.14:3000/users", data);
+      const response = await axios.post(`http://${your_json_url}/users`, data);
 
       if (response.status === 201) {
         console.log("User registered:", response.data[0]);

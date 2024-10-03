@@ -1,3 +1,5 @@
+import { Job } from "./types";
+
 // RootStackParamList.ts
 export type RootStackParamList = {
     Main: undefined;
@@ -8,16 +10,6 @@ export type RootStackParamList = {
     JobDetails: { job: Job }; // Expecting a job object
 
 };
-
-export interface Job {
-    jobTitle: string;
-    companyName: string;
-    location: string;
-    jobPay: string;
-    employmentType: string;
-    postedTime: string;
-  }
-
 // DrawerParamList.ts
 export type DrawerParamList = {
     Home: undefined;

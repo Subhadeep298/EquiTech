@@ -13,6 +13,7 @@ import { StatusBar } from 'expo-status-bar';
 import { useAuthStore } from './stores/authStore';
 import UserProfile from './screens/UserProfile';
 import Logout from './components/Logout';
+import AppliedJobs from './screens/AppliedJobs';
 
 // Define the Job interface (make sure this matches the one in your Home component)
 interface Job {
@@ -69,8 +70,7 @@ function DrawerNavigator() {
           <Drawer.Screen name="User Profile" component={UserProfile} />
           <Drawer.Screen name="Logout" component={Logout} />
           <Drawer.Screen name="Post a Job" component={HireScreen} />
-
-
+          <Drawer.Screen name="My Applied Job" component={AppliedJobs}/>
         </>
       ) : (
         <>

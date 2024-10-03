@@ -21,6 +21,7 @@ import axios from "axios";
 import { useAuthStore } from "../stores/authStore";
 import Icon from "react-native-vector-icons/Ionicons"; // Import the icon component
 import Footer from "../components/Footer";
+import { your_json_url } from "../utils/url";
 
 // Zod Schema for form validation
 const loginSchema = z.object({
@@ -55,7 +56,7 @@ const SignIn: React.FC = () => {
   const onSubmit: SubmitHandler<LoginFormData> = async (data) => {
     try {
       const response = await axios.get(
-        `http://192.168.1.14:3000/users?email=${data.email}&password=${data.password}`
+        `http://${your_json_url}/users?email=${data.email}&password=${data.password}`
       );
       const user = response.data[0];
       if (response.data.length > 0) {

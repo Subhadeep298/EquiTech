@@ -1,35 +1,65 @@
-import React from "react";
+import React, { useState } from "react";
 import { Modal, View, Text, StyleSheet, ScrollView, SafeAreaView } from "react-native";
 import CustomButton from "../components/CustomButtons";
 import colors from "../utils/colors";
 import { StatusBar } from "expo-status-bar";
+import ApplicationModal from "./ApplicationModal";
+import { useAuthStore } from "../stores/authStore";
+import { useNavigation } from "@react-navigation/native";
+import axios from "axios";
+import { your_json_url } from "../utils/url";
+import { JobData } from "../utils/types";
 
-interface JobData {
-  jobTitle: string;
-  jobDescription: string;
-  companyName: string;
-  location: string;
-  keySkills: string[];
-  jobType: string;
-  postedTime: string;
-  companyInfo: string;
-  hiringTrendsForWomen: string;
-  companyCultureTowardsWomen: string;
-  benefitsForWomen: string;
-  jobPay: string;
-  workMode: string;
-  jobOpenings: number;
-  employmentType: string;
-}
 
 interface JobDetailsModalProps {
   jobData: JobData;
   isVisible: boolean;
   onClose: () => void;
-  onApplyNow: () => void;
 }
+const JobDetailsModal: React.FC<JobDetailsModalProps> = ({ jobData, isVisible, onClose }) => {
+  const navigation = useNavigation<any>();
+  const [isApplicationModalVisible, setIsApplicationModalVisible] = useState(false);
+  const { user, isAuthenticated, applyToJob, hasAppliedToJob } = useAuthStore();
+  const userId = user?.id; // Extract user.id from Zustand
 
-const JobDetailsModal: React.FC<JobDetailsModalProps> = ({ jobData, isVisible, onClose, onApplyNow }) => (
+  const handleApplyNow = () => {
+    setIsApplicationModalVisible(true);
+  };
+
+  const handleApplicationSubmit = async (resumeUri: string, coverLetterUri: string) => {
+    try {
+      const response = await axios.get(`http://${your_json_url}/jobApplications?jobId=${jobData.id}`);
+      let jobApplication = response.data[0];
+
+      if (!jobApplication) {
+        jobApplication = { jobId: jobData.id, applicants: [] };
+      }
+
+      jobApplication.applicants.push({ userId, resumeUri, coverLetterUri });
+
+      if (response.data.length === 0) {
+        await axios.post(`http://${your_json_url}/jobApplications`, jobApplication);
+      } else {
+        await axios.put(`http://${your_json_url}/jobApplications/${jobApplication.id}`, jobApplication);
+      }
+
+      applyToJob(jobData.id); // Update applied jobs in Zustand
+      setIsApplicationModalVisible(false);
+      alert('Application submitted successfully!');
+    } catch (error) {
+      console.error('Error submitting application:', error);
+      alert('Failed to submit application. Please try again.');
+    }
+  };
+
+  const handleLoginRedirect = () => {
+    onClose();
+    navigation.navigate('Drawer', { screen: 'Login' });
+  };
+
+  const isAlreadyApplied = hasAppliedToJob(jobData.id);
+
+  return (
   <Modal visible={isVisible} animationType="fade">
     <StatusBar backgroundColor="#F0F8FF"/>
     <SafeAreaView style={styles.safeArea}>
@@ -75,26 +105,55 @@ const JobDetailsModal: React.FC<JobDetailsModalProps> = ({ jobData, isVisible, o
         </ScrollView>
         <View style={styles.buttonContainer}>
         
-        <CustomButton
-            text="Apply Now"
-            color={colors.secondary}
-            borderColor={colors.secondary}
-            textColor={colors.primary}
-            onPress={onApplyNow}
-          />
-          <CustomButton
-            text="Close"
-            color={colors.primary}
-            borderColor={colors.secondary}
-            textColor={colors.text}
-            onPress={onClose}
-          />
+        <View style={styles.buttonContainer}>
+            {isAuthenticated ? (
+              isAlreadyApplied ? (
+                <CustomButton
+                  text="Already Applied"
+                  color="gray"
+                  borderColor="gray"
+                  textColor={colors.primary}
+                  onPress={() => alert('You have already applied to this job.')}
+                  disabled={true} // Disable the button if already applied
+                />
+              ) : (
+                <CustomButton
+                  text="Apply Now"
+                  color={colors.secondary}
+                  borderColor={colors.secondary}
+                  textColor={colors.primary}
+                  onPress={handleApplyNow}
+                />
+              )
+            ) : (
+              <CustomButton
+                text="Login to Apply"
+                color={colors.secondary}
+                borderColor={colors.secondary}
+                textColor={colors.primary}
+                onPress={handleLoginRedirect}
+              />
+            )}
+
+            <CustomButton
+              text="Close"
+              color={colors.primary}
+              borderColor={colors.secondary}
+              textColor={colors.text}
+              onPress={onClose}
+            />
           </View>
-        
-      </View>
-    </SafeAreaView>
-  </Modal>
-);
+        </View>
+        </View>
+      </SafeAreaView>
+      <ApplicationModal
+        isVisible={isApplicationModalVisible}
+        onClose={() => setIsApplicationModalVisible(false)}
+        onSubmit={handleApplicationSubmit}
+      />
+    </Modal>
+  );
+};
 
 const styles = StyleSheet.create({
   safeArea: {

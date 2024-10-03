@@ -7,39 +7,24 @@ import JobCard from '../components/JobCard';
 import axios from 'axios';
 import colors from '../utils/colors';
 import JobDetailsModal from '../components/JobsDetails'; // Import your modal component
+import { your_json_url } from '../utils/url';
+import { JobData } from '../utils/types';
 
-interface Job {
-  jobTitle: string;
-  companyName: string;
-  location: string;
-  jobPay: string;
-  employmentType: string;
-  postedTime: string;
-  jobDescription: string; // Make sure to include the job description in the Job interface
-  keySkills: string[]; // Make sure to include key skills
-  jobType: string; // Add job type if it's part of the data
-  companyInfo: string; // Add company info if it's part of the data
-  hiringTrendsForWomen: string; // Add hiring trends if it's part of the data
-  companyCultureTowardsWomen: string; // Add company culture info if it's part of the data
-  benefitsForWomen: string; // Add benefits for women if it's part of the data
-  workMode: string; // Add work mode if it's part of the data
-  jobOpenings: number; // Add job openings if it's part of the dat
-  postedBy:number;
-}
+
 const Home: React.FC = () => {
   const navigation = useNavigation();
-  const [jobs, setJobs] = useState<Job[]>([]);
-  const [filteredJobs, setFilteredJobs] = useState<Job[]>([]);
+  const [jobs, setJobs] = useState<JobData[]>([]);
+  const [filteredJobs, setFilteredJobs] = useState<JobData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [selectedJob, setSelectedJob] = useState<Job | null>(null);
+  const [selectedJob, setSelectedJob] = useState<JobData | null>(null);
   const [keywordSearch, setKeywordSearch] = useState('');
   const [locationSearch, setLocationSearch] = useState('');
 
   const fetchJobs = async () => {
     try {
-      const response = await axios.get('http://192.168.1.14:3000/jobs');
+      const response = await axios.get(`http://${your_json_url}/jobs`);
       setJobs(response.data);
       setFilteredJobs(response.data);
     } catch (error) {
@@ -71,7 +56,7 @@ const Home: React.FC = () => {
     setFilteredJobs(filtered);
   }, [keywordSearch, locationSearch, jobs]);
 
-  const handlePress = (job: Job) => {
+  const handlePress = (job: JobData) => {
     setSelectedJob(job);
     setIsModalVisible(true);
   };
@@ -79,11 +64,6 @@ const Home: React.FC = () => {
   const handleClose = () => {
     setIsModalVisible(false);
     setSelectedJob(null);
-  };
-
-  const handleApplyNow = () => {
-    console.log("Applying for job:", selectedJob);
-    // Implement your apply logic here
   };
 
   const loadMoreJobs = () => {
@@ -139,8 +119,8 @@ const Home: React.FC = () => {
         )}
         contentContainerStyle={styles.cardsContainer}
         ListFooterComponent={<ActivityIndicator size="large" color="#034B86" />}
-    onEndReached={loadMoreJobs} // Load more jobs when reaching the end
-    onEndReachedThreshold={0.1} // Adjust threshold to avoid premature triggering
+    onEndReached={loadMoreJobs} 
+    onEndReachedThreshold={0.1} 
       />
 
       {/* Job Details Modal */}
@@ -149,7 +129,6 @@ const Home: React.FC = () => {
           jobData={selectedJob}
           isVisible={isModalVisible}
           onClose={handleClose}
-          onApplyNow={handleApplyNow} // Handle Apply Now button
         />
       )}
     </View>
