@@ -20,7 +20,7 @@ const HireScreen: React.FC = () => {
     if (isAuthenticated) {
       setModalVisible(!modalVisible);
     } else {
-      navigation.navigate("Drawer",{screen: "Login"}); 
+      navigation.navigate('Drawer', { screen: 'Login', params: { previousRoute: 'PostJob' } })    
     }
   };
 

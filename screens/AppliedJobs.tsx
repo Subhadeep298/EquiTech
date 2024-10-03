@@ -1,35 +1,48 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
-import { useAuthStore } from '../stores/authStore'; // Assuming Zustand is used for the authStore
-import Header from '../components/Header'; // Assuming you have a Header component
+import { useAuthStore } from '../stores/authStore';
+import Header from '../components/Header';
 import JobCard from '../components/JobCard';
-import JobDetailsModal from '../components/JobsDetails'; // Assuming you have a JobDetailsModal component
-import { JobData } from '../utils/types'; // Import JobData type
-import axios from 'axios'; // For fetching job data
-import { your_json_url } from '../utils/url'; // Your API URL
+import JobDetailsModal from '../components/JobsDetails';
+import { JobData } from '../utils/types';
+import axios from 'axios';
+import { your_json_url } from '../utils/url';
 import { useNavigation } from '@react-navigation/native';
 
 const AppliedJobs: React.FC = () => {
   const navigation = useNavigation<any>();
-  const { appliedJobs } = useAuthStore(); // Fetch applied job IDs from authStore
-  const [jobs, setJobs] = useState<JobData[]>([]); // State to store fetched jobs
+  const { user, isAuthenticated,appliedJobs } = useAuthStore();
+  const [jobs, setJobs] = useState<JobData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedJob, setSelectedJob] = useState<JobData | null>(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   useEffect(() => {
-    // Function to fetch full job details for applied jobs
     const fetchAppliedJobs = async () => {
-      try {
-        const response = await axios.get(`http://${your_json_url}/jobs`);
-        const allJobs = response.data;
+      if (!isAuthenticated || !user) {
+        setLoading(false);
+        return;
+      }
 
-        // Filter the jobs using the job IDs from appliedJobs
-        const filteredJobs = allJobs.filter((job: JobData) => appliedJobs.includes(job.id));
+      try {
+        // Fetch job applications for the current user
+        const applicationsResponse = await axios.get(`http://${your_json_url}/jobApplications`);
+        const allApplications: any[] = applicationsResponse.data;
+        const userApplications = allApplications.filter(app => 
+          app.applicants.some(applicant => applicant.userId === user.id)
+        );
+
+        // Fetch all jobs
+        const jobsResponse = await axios.get(`http://${your_json_url}/jobs`);
+        const allJobs: JobData[] = jobsResponse.data;
+
+        const appliedJobIds = userApplications.map(app => app.jobId);
+        const filteredJobs = allJobs.filter(job => appliedJobIds.includes(job.id));
+
         setJobs(filteredJobs);
       } catch (error) {
-        console.error('Error fetching jobs:', error);
+        console.error('Error fetching applied jobs:', error);
         setError('Failed to load applied jobs. Please try again.');
       } finally {
         setLoading(false);
@@ -37,7 +50,7 @@ const AppliedJobs: React.FC = () => {
     };
 
     fetchAppliedJobs();
-  }, [appliedJobs]);
+  }, [isAuthenticated, user,appliedJobs]);
 
   const handlePress = (job: JobData) => {
     setSelectedJob(job);
@@ -57,6 +70,15 @@ const AppliedJobs: React.FC = () => {
     return <Text style={styles.errorText}>{error}</Text>;
   }
 
+  if (!isAuthenticated) {
+    return (
+      <View style={styles.container}>
+        <Header navigation={navigation} />
+        <Text style={styles.noJobsText}>Please log in to view your applied jobs.</Text>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <Header navigation={navigation} />
@@ -73,7 +95,7 @@ const AppliedJobs: React.FC = () => {
                 jobPay={item.jobPay}
                 employmentType={item.employmentType}
                 postedTime={item.postedTime}
-                onPress={() => handlePress(item)} // Pass the job item to handlePress
+                onPress={() => handlePress(item)}
               />
             )}
             contentContainerStyle={styles.cardsContainer}
@@ -83,7 +105,6 @@ const AppliedJobs: React.FC = () => {
         )}
       </View>
 
-      {/* Job Details Modal */}
       {selectedJob && (
         <JobDetailsModal
           jobData={selectedJob}
@@ -94,6 +115,7 @@ const AppliedJobs: React.FC = () => {
     </View>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {

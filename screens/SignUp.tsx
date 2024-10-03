@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../utils/RootStackParamList";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -42,7 +42,12 @@ type RegisterFormData = z.infer<typeof registerSchema>;
 type RegisterScreenNavigationProp =
   NativeStackNavigationProp<RootStackParamList>;
 
+  type RouteParams = {
+    goback?: boolean; // Define goback as an optional property
+  };
 const SignUp: React.FC = () => {
+  const route = useRoute(); // Get current route information
+  const { goback } = route.params as RouteParams || {}; // Safely destructure goback
 
   const { isAuthenticated } = useAuthStore(); // Get Zustand state and actions
   const navigation = useNavigation<any>();
@@ -63,7 +68,11 @@ const SignUp: React.FC = () => {
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigation.navigate("Home");
+      if (goback) {
+        navigation.goBack(); // Go back to the previous route
+      } else {
+        navigation.navigate("Home"); // Navigate to Home if no previous route
+      }
     }
   }, [isAuthenticated]);
 
@@ -92,12 +101,14 @@ const SignUp: React.FC = () => {
 
   return (
     <>
-    <ScrollView contentContainerStyle={styles.container}>
+      <View style={styles.container}>
       <HomeButton
         imageSource={require("../assets/sucheta.png")}
         position="left"
       />
       <HomeButton imageSource={require("../assets/logo.png")}/>
+      </View>
+      <ScrollView contentContainerStyle={styles.container}>
 
       <Text style={styles.title}>Ready to take the next step?</Text>
       <Text style={styles.subtitle}>Create an Account</Text>
@@ -246,7 +257,7 @@ const SignUp: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    justifyContent: "center",
+    justifyContent: "flex-start",
     alignItems: "center",
     backgroundColor: colors.primary,
     padding: 20,

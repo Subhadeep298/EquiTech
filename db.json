@@ -1,18 +1,19 @@
 {
   "users": [
     {
-      "name": "subhadeep",
-      "email": "subhadeepbanerjee298@gmail.com",
-      "phoneNumber": "8617503807",
-      "skills": "Subh",
-      "workExperience": "H",
-      "education": "Hh",
-      "id": "d452"
+      "name": "s",
+      "email": "s@gmail.com",
+      "phoneNumber": "1234567890",
+      "skills": "Sgjcndn",
+      "workExperience": "Sujanndnnk",
+      "education": "Enanmjjbobi",
+      "password": "123123",
+      "id": "c83c"
     }
   ],
   "jobs": [
     {
-      "id": "f186",
+      "id": "1",
       "jobTitle": "Frontend Developer 1",
       "jobDescription": "Develop modern web interfaces.",
       "companyName": "Infosys",
@@ -34,7 +35,7 @@
       "postedTime": "2 days ago"
     },
     {
-      "id": "f326",
+      "id": "2",
       "jobTitle": "Data Analyst 2",
       "jobDescription": "Analyze data to drive business decisions.",
       "companyName": "Tata Consultancy Services",
@@ -56,7 +57,7 @@
       "postedTime": "1 week ago"
     },
     {
-      "id": "f306",
+      "id": "3",
       "jobTitle": "Product Manager 3",
       "jobDescription": "Lead product strategy and development.",
       "companyName": "Amazon India",
@@ -78,7 +79,7 @@
       "postedTime": "5 days ago"
     },
     {
-      "id": "f381",
+      "id": "4",
       "jobTitle": "Software Engineer 4",
       "jobDescription": "Develop scalable backend systems.",
       "companyName": "Wipro",
@@ -100,7 +101,7 @@
       "postedTime": "3 days ago"
     },
     {
-      "id": "f300",
+      "id": "5",
       "jobTitle": "Data Analyst 6",
       "jobDescription": "Analyze data to drive business decisions.",
       "companyName": "Tata Consultancy Services",
@@ -122,7 +123,7 @@
       "postedTime": "1 week ago"
     },
     {
-      "id": "f116",
+      "id": "6",
       "jobTitle": "Product Manager 7",
       "jobDescription": "Lead product strategy and development.",
       "companyName": "Amazon India",
@@ -144,7 +145,7 @@
       "postedTime": "5 days ago"
     },
     {
-      "id": "f006",
+      "id": "7",
       "jobTitle": "Software Engineer 8",
       "jobDescription": "Develop scalable backend systems.",
       "companyName": "Wipro",
@@ -166,7 +167,7 @@
       "postedTime": "3 days ago"
     },
     {
-      "id": "f916",
+      "id": "8",
       "jobTitle": "Frontend Developer 9",
       "jobDescription": "Develop modern web interfaces.",
       "companyName": "Infosys",
@@ -188,7 +189,7 @@
       "postedTime": "2 days ago"
     },
     {
-      "id": "f211",
+      "id": "9",
       "jobTitle": "Data Analyst 10",
       "jobDescription": "Analyze data to drive business decisions.",
       "companyName": "Tata Consultancy Services",
@@ -210,7 +211,7 @@
       "postedTime": "1 week ago"
     },
     {
-      "id": "a386",
+      "id": "10",
       "jobTitle": "Product Manager 11",
       "jobDescription": "Lead product strategy and development.",
       "companyName": "Amazon India",
@@ -232,29 +233,7 @@
       "postedTime": "5 days ago"
     },
     {
-      "id": "1386",
-      "jobTitle": "Software Engineer 12",
-      "jobDescription": "Develop scalable backend systems.",
-      "companyName": "Wipro",
-      "companyInfo": "Wipro is a multinational corporation providing IT, consulting, and business process services.",
-      "hiringTrendsForWomen": "45% of new hires are women.",
-      "companyCultureTowardsWomen": "Empowers women with flexible work options.",
-      "benefitsForWomen": "Work from home options, health benefits.",
-      "jobPay": "₹15,00,000 - ₹20,00,000",
-      "jobType": "Full-time",
-      "location": "Chennai, Tamil Nadu",
-      "keySkills": [
-        "Java",
-        "Microservices",
-        "AWS"
-      ],
-      "workMode": "Hybrid",
-      "jobOpenings": 7,
-      "employmentType": "Full-time",
-      "postedTime": "3 days ago"
-    },
-    {
-      "id": "f386",
+      "id": "12",
       "jobTitle": "Personal ",
       "companyName": "Virtusaaaa",
       "location": "Shdjisns",
@@ -278,34 +257,24 @@
   ],
   "jobApplications": [
     {
-      "jobId": "f386",
+      "id": "bfdc",
+      "jobId": "1",
       "applicants": [
         {
-          "userId": "d452",
-          "resumeUri": "file:///path/to/resume.pdf",
-          "coverLetterUri": "file:///path/to/coverletter.pdf"
+          "userId": "c83c",
+          "resumeUri": "file:///data/user/0/host.exp.exponent/cache/DocumentPicker/fe33888e-3225-4753-be97-3cf9ea79a630.pdf",
+          "coverLetterUri": "file:///data/user/0/host.exp.exponent/cache/DocumentPicker/914bb882-86f0-42f5-920e-4bc1ae613632.pdf"
         }
       ]
-    },
+    }
+  ],
+  "userAppliedJobs": [
     {
-      "id": "3525",
-      "jobId": "f326",
-      "applicants": [
+      "id": "",
+      "userId": "",
+      "jobs": [
         {
-          "userId": "d452",
-          "resumeUri": "file:///data/user/0/host.exp.exponent/cache/DocumentPicker/3cf20441-d566-44e3-97b0-4d12c2b5bcfb.pdf",
-          "coverLetterUri": "file:///data/user/0/host.exp.exponent/cache/DocumentPicker/29cf6d1b-bdbc-4fac-bf21-bcb9374c3958.pdf"
-        }
-      ]
-    },
-    {
-      "id": "a4a7",
-      "jobId": "f186",
-      "applicants": [
-        {
-          "userId": "d452",
-          "resumeUri": "file:///data/user/0/host.exp.exponent/cache/DocumentPicker/031152e9-744e-42a7-9cc8-7e9f7ceade54.pdf",
-          "coverLetterUri": "file:///data/user/0/host.exp.exponent/cache/DocumentPicker/37055d71-4cbf-4c9b-b296-a8bb1de4ac8c.pdf"
+          "jobId": ""
         }
       ]
     }

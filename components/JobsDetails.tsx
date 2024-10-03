@@ -54,9 +54,8 @@ const JobDetailsModal: React.FC<JobDetailsModalProps> = ({ jobData, isVisible, o
 
   const handleLoginRedirect = () => {
     onClose();
-    navigation.navigate('Drawer', { screen: 'Login' });
-  };
-
+    navigation.navigate('Drawer', { screen: 'Login',params:{goBack:"true"}});
+  }
   const isAlreadyApplied = hasAppliedToJob(jobData.id);
 
   return (

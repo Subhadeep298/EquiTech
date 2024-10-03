@@ -9,8 +9,9 @@ const Logout = ({ navigation }: any) => {
   const logout = useAuthStore((state) => state.logout);
   const [modalVisible, setModalVisible] = useState(true);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     logout();
+    console.log("bgibb");
     navigation.navigate('Main'); // Navigate to Home or any other screen after logout
   };
 

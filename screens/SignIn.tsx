@@ -56,10 +56,11 @@ const SignIn: React.FC = () => {
   const onSubmit: SubmitHandler<LoginFormData> = async (data) => {
     try {
       const response = await axios.get(
-        `http://${your_json_url}/users?email=${data.email}&password=${data.password}`
+        `http://${your_json_url}/users?email=${data.email}`
       );
       const user = response.data[0];
-      if (response.data.length > 0) {
+      if (response.data.length > 0 && user.password === data.password) {
+
         console.log("User signed in:", response.data[0]);
         // Store the user data in Zustand
         login({

@@ -44,12 +44,12 @@ const Home: React.FC = () => {
       if (!job) return false;
       
       const keywordMatch = 
-        (job.jobTitle?.toLowerCase().includes(keywordSearch.toLowerCase()) ?? false) ||
-        (job.companyName?.toLowerCase().includes(keywordSearch.toLowerCase()) ?? false) ||
-        (job.employmentType?.toLowerCase().includes(keywordSearch.toLowerCase()) ?? false);
+        (job.jobTitle?.toLowerCase().includes(keywordSearch.toLowerCase().trim()) ?? false) ||
+        (job.companyName?.toLowerCase().includes(keywordSearch.toLowerCase().trim()) ?? false) ||
+        (job.employmentType?.toLowerCase().includes(keywordSearch.toLowerCase().trim()) ?? false);
       
       const locationMatch = 
-        job.location?.toLowerCase().includes(locationSearch.toLowerCase()) ?? false;
+        job.location?.toLowerCase().includes(locationSearch.toLowerCase().trim()) ?? false;
 
       return keywordMatch && locationMatch;
     });
@@ -105,7 +105,7 @@ const Home: React.FC = () => {
 
       <FlatList
         data={filteredJobs}
-        keyExtractor={(item, index) => index.toString()}
+        keyExtractor={(item,index) => index.toString()}
         renderItem={({ item }) => (
           <JobCard
             jobTitle={item.jobTitle}
@@ -117,10 +117,17 @@ const Home: React.FC = () => {
             onPress={() => handlePress(item)} // Pass the item to handlePress
           />
         )}
+        ListEmptyComponent={
+          !loading && (
+            <Text style={styles.noResultsText}>No jobs found for your search criteria.</Text>
+          )
+        }
         contentContainerStyle={styles.cardsContainer}
-        ListFooterComponent={<ActivityIndicator size="large" color="#034B86" />}
-    onEndReached={loadMoreJobs} 
-    onEndReachedThreshold={0.1} 
+        ListFooterComponent={
+          loading ? <ActivityIndicator size="large" color="#034B86" /> : null
+        }
+        onEndReached={loadMoreJobs} 
+        onEndReachedThreshold={0.1} 
       />
 
       {/* Job Details Modal */}
@@ -182,6 +189,11 @@ const styles = StyleSheet.create({
     color: 'red',
     textAlign: 'center',
     marginVertical: 10,
+  },noResultsText: {
+    textAlign: 'center',
+    fontSize: 16,
+    color: '#666',
+    marginTop: 20,
   },
 });
 

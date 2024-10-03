@@ -3,6 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface User {
   id: string;
+  password : string;
   email: string;
   name: string;
   phoneNumber: string;
@@ -20,6 +21,7 @@ interface AuthState {
   loadUser: () => Promise<void>;
   applyToJob: (jobId: string) => void; // Function to add a job to appliedJobs
   hasAppliedToJob: (jobId: string) => any; // Function to check if user applied to a job
+  setUser: (user: User) => void; // New method to update user information
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
@@ -56,4 +58,8 @@ export const useAuthStore = create<AuthState>((set) => ({
   hasAppliedToJob: (jobId: string) => {
     return useAuthStore.getState().appliedJobs.includes(jobId);
   },
+
+  setUser: (user: User) => {
+    set({ user });
+  }, // Implement the setUser method
 }));
