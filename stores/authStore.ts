@@ -3,63 +3,96 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface User {
   id: string;
-  password : string;
+  password: string;
   email: string;
   name: string;
   phoneNumber: string;
   skills: string;
   workExperience: string;
   education: string;
+  role: string;
 }
 
 interface AuthState {
   isAuthenticated: boolean;
   user: User | null;
-  appliedJobs: string[]; // Array to store job IDs the user has applied to
-  login: (user: User) => void;
-  logout: () => void;
+  appliedJobs: string[];
+  isJobSeeker: boolean;
+  login: (user: User) => Promise<void>;
+  logout: () => Promise<void>;
   loadUser: () => Promise<void>;
-  applyToJob: (jobId: string) => void; // Function to add a job to appliedJobs
-  hasAppliedToJob: (jobId: string) => any; // Function to check if user applied to a job
-  setUser: (user: User) => void; // New method to update user information
+  applyToJob: (jobId: string) => Promise<void>;
+  hasAppliedToJob: (jobId: string) => boolean;
+  setUser: (user: User) => void;
+  setIsJobSeeker: (isJobSeeker: boolean) => Promise<void>;
 }
 
-export const useAuthStore = create<AuthState>((set) => ({
+export const useAuthStore = create<AuthState>((set, get) => ({
   isAuthenticated: false,
   user: null,
   appliedJobs: [],
-
+  isJobSeeker: false, // Default to true, can be changed later
+  
   login: async (user: User) => {
-    await AsyncStorage.setItem('user', JSON.stringify(user)); // Save user to Async Storage
-    set({ isAuthenticated: true, user });
+    const isJobSeeker = user.role === 'jobseeker';
+    
+    // Store user data in AsyncStorage
+    await AsyncStorage.setItem('user', JSON.stringify(user));
+    await AsyncStorage.setItem('isJobSeeker', JSON.stringify(isJobSeeker));
+    
+    // Update state
+    set({ isAuthenticated: true, user, isJobSeeker });
   },
 
   logout: async () => {
-    await AsyncStorage.removeItem('user'); // Remove user from Async Storage
-    set({ isAuthenticated: false, user: null, appliedJobs: [] });
+    // Remove user data from AsyncStorage
+    await AsyncStorage.removeItem('user');
+    await AsyncStorage.removeItem('isJobSeeker');
+    await AsyncStorage.removeItem('appliedJobs');
+    
+    // Reset state
+    set({ isAuthenticated: false, user: null, appliedJobs: [], isJobSeeker: true });
   },
 
   loadUser: async () => {
     const userData = await AsyncStorage.getItem('user');
+    const isJobSeekerData = await AsyncStorage.getItem('isJobSeeker');
+    const appliedJobsData = await AsyncStorage.getItem('appliedJobs') || '[]';
+
     if (userData) {
       const parsedUser = JSON.parse(userData);
-      const appliedJobs = await AsyncStorage.getItem('appliedJobs') || '[]';
-      set({ isAuthenticated: true, user: parsedUser, appliedJobs: JSON.parse(appliedJobs) });
+      const isJobSeeker = isJobSeekerData ? JSON.parse(isJobSeekerData) : null;
+      const appliedJobs = JSON.parse(appliedJobsData);
+      
+      // Update state
+      set({ isAuthenticated: true, user: parsedUser, appliedJobs, isJobSeeker });
     }
   },
 
   applyToJob: async (jobId: string) => {
-    set((state) => ({
-      appliedJobs: [...state.appliedJobs, jobId],
-    }));
-    await AsyncStorage.setItem('appliedJobs', JSON.stringify([...useAuthStore.getState().appliedJobs, jobId]));
+    const currentAppliedJobs = get().appliedJobs;
+
+    // Update applied jobs state
+    const updatedJobs = [...currentAppliedJobs, jobId];
+    set({ appliedJobs: updatedJobs });
+    
+    // Save to AsyncStorage
+    await AsyncStorage.setItem('appliedJobs', JSON.stringify(updatedJobs));
   },
 
   hasAppliedToJob: (jobId: string) => {
-    return useAuthStore.getState().appliedJobs.includes(jobId);
+    return get().appliedJobs.includes(jobId);
   },
 
   setUser: (user: User) => {
     set({ user });
-  }, // Implement the setUser method
+  },
+
+  setIsJobSeeker: async (isJobSeeker: boolean) => {
+    // Store isJobSeeker state in AsyncStorage
+    await AsyncStorage.setItem('isJobSeeker', JSON.stringify(isJobSeeker));
+    
+    // Update state
+    set({ isJobSeeker });
+  },
 }));

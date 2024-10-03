@@ -14,75 +14,60 @@ import { useAuthStore } from "./stores/authStore";
 import UserProfile from "./screens/UserProfile";
 import Logout from "./components/Logout";
 import AppliedJobs from "./screens/AppliedJobs";
-import { Ionicons } from "@expo/vector-icons"; // Import icons for customization
+import { Ionicons } from "@expo/vector-icons";
+import { RootStackParamList } from "./utils/RootStackParamList";
 
-// Define the Job interface (make sure this matches the one in your Home component)
-interface Job {
-  jobTitle: string;
-  companyName: string;
-  location: string;
-  jobPay: string;
-  employmentType: string;
-  postedTime: string;
-}
-
-// Define the RootStackParamList
-type RootStackParamList = {
-  Main: undefined;
-  Home: undefined;
-  SignIn: undefined;
-  SignUp: undefined;
-  Drawer: undefined;
-  JobDetails: { job: Job };
-};
-
+// Stack and Drawer Navigator definitions
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const Drawer = createDrawerNavigator();
 
-// Create the Drawer Navigator
 function DrawerNavigator() {
-  const { isAuthenticated, loadUser } = useAuthStore(); // Get authentication state from Zustand
+  const { isAuthenticated, loadUser, isJobSeeker } = useAuthStore();
 
+  // Load user only once when component mounts
   useEffect(() => {
-    loadUser(); // Load user data when the app starts
-  }, [loadUser,isAuthenticated]);
+    loadUser();
+    console.log("is job seeker or not"+isJobSeeker);
+  }, []);
 
   return (
     <Drawer.Navigator
       initialRouteName="Home"
       screenOptions={{
-        headerShown: false, // You can hide or show the header here
+        headerShown: false,
         headerStyle: {
-          backgroundColor: colors.primary, // Customize the header background color
+          backgroundColor: colors.primary,
         },
-        headerTintColor: "#fff", // Customize the header text color
+        headerTintColor: "#fff",
         drawerStyle: {
-          backgroundColor: colors.primary, // Customize the drawer background color
-          width: 240, // Set drawer width
+          backgroundColor: colors.primary,
+          width: 240,
         },
         drawerLabelStyle: {
-          fontSize: 16, // Set the label font size
-          fontWeight: "bold", // Make the labels bold
+          fontSize: 16,
+          fontWeight: "bold",
         },
-        drawerActiveTintColor: colors.secondary, // Active item text color
-        drawerInactiveTintColor: colors.text, // Inactive item text color
-        drawerActiveBackgroundColor: colors.tertiary, // Active item background color
+        drawerActiveTintColor: colors.secondary,
+        drawerInactiveTintColor: colors.text,
+        drawerActiveBackgroundColor: colors.tertiary,
       }}
     >
+      {/* Home screen is always accessible */}
       <Drawer.Screen
         name="Home"
         component={Home}
         options={{
-          drawerLabel: "Home", // Custom label text
+          drawerLabel: "Home",
           drawerIcon: ({ color, size }) => (
-            <Ionicons name="home" color={color} size={size} /> // Custom icon
+            <Ionicons name="home" color={color} size={size} />
           ),
           drawerLabelStyle: {
-            color: colors.secondary, // Custom text color for this screen
-            fontWeight: "500", // Bold label text
+            color: colors.secondary,
+            fontWeight: "500",
           },
         }}
       />
+      {/* Conditionally render screens based on authentication status */}
       {isAuthenticated ? (
         <>
           <Drawer.Screen
@@ -94,50 +79,54 @@ function DrawerNavigator() {
                 <Ionicons name="person" color={color} size={size} />
               ),
               drawerLabelStyle: {
-                color: colors.secondary, // Custom text color for this screen
-                fontWeight: "500", // Bold label text
+                color: colors.secondary,
+                fontWeight: "500",
               },
             }}
           />
-          <Drawer.Screen
-            name="Post a Job"
-            component={HireScreen}
-            options={{
-              drawerLabel: "Post a Job",
-              drawerIcon: ({ color, size }) => (
-                <Ionicons name="briefcase" color={color} size={size} />
-
-              ),
-              drawerLabelStyle: {
-                color: colors.secondary, // Custom text color for this screen
-                fontWeight: "500", // Bold label text
-              },
-            }}
-          />
-          <Drawer.Screen
-            name="Applied Jobs"
-            component={AppliedJobs}
-            options={{
-              drawerLabel: "Applied Jobs",
-              drawerIcon: ({ color, size }) => (
-                <Ionicons name="file-tray" color={color} size={size} />
-              ),drawerLabelStyle: {
-                color: colors.secondary, // Custom text color for this screen
-                fontWeight: "500", // Bold label text
-              },
-            }}
-          />
+          {!isJobSeeker && (
+            <Drawer.Screen
+              name="Post a Job"
+              component={HireScreen}
+              options={{
+                drawerLabel: "Post a Job",
+                drawerIcon: ({ color, size }) => (
+                  <Ionicons name="briefcase" color={color} size={size} />
+                ),
+                drawerLabelStyle: {
+                  color: colors.secondary,
+                  fontWeight: "500",
+                },
+              }}
+            />
+          )}
+          {isJobSeeker && (
+            <Drawer.Screen
+              name="Applied Jobs"
+              component={AppliedJobs}
+              options={{
+                drawerLabel: "Applied Jobs",
+                drawerIcon: ({ color, size }) => (
+                  <Ionicons name="file-tray" color={color} size={size} />
+                ),
+                drawerLabelStyle: {
+                  color: colors.secondary,
+                  fontWeight: "500",
+                },
+              }}
+            />
+          )}
           <Drawer.Screen
             name="Logout"
             component={Logout}
             options={{
-              drawerLabel: "Logout", // Custom label
+              drawerLabel: "Logout",
               drawerIcon: ({ color, size }) => (
-                <Ionicons name="log-out" color="red" size={size} /> // Red color for Logout icon
+                <Ionicons name="log-out" color="red" size={size} />
               ),
               drawerLabelStyle: {
-                color: "red", // Red text color for Logout
-                fontWeight: "500", // Bold text
+                color: "red",
+                fontWeight: "500",
               },
             }}
           />
@@ -145,46 +134,30 @@ function DrawerNavigator() {
       ) : (
         <>
           <Drawer.Screen
-            name="Post a Job"
-            component={HireScreen}
-            options={{
-              drawerLabel: "Post a Job",
-              drawerIcon: ({ color, size }) => (
-                <Ionicons name="briefcase" color={color} size={size} /> // Custom briefcase icon
-              ),
-              drawerLabelStyle: {
-                color: colors.text,
-                fontWeight: "500", // Bold label text
-              },
-            }}
-          />
-
-          <Drawer.Screen
             name="Login"
             component={SignIn}
             options={{
               drawerLabel: "Login",
               drawerIcon: ({ color, size }) => (
-                <Ionicons name="log-in" color={color} size={size} /> // Custom log-in icon
+                <Ionicons name="log-in" color={color} size={size} />
               ),
               drawerLabelStyle: {
-                color: colors.text, // Default text color
-                fontWeight: "500", // Bold label text
+                color: colors.text,
+                fontWeight: "500",
               },
             }}
           />
-
           <Drawer.Screen
             name="Registration"
             component={SignUp}
             options={{
               drawerLabel: "Registration",
               drawerIcon: ({ color, size }) => (
-                <Ionicons name="person-add" color={color} size={size} /> // Custom person-add icon
+                <Ionicons name="person-add" color={color} size={size} />
               ),
               drawerLabelStyle: {
-                color: colors.text, // Default text color
-                fontWeight: "500", // Bold label text
+                color: colors.text,
+                fontWeight: "500",
               },
             }}
           />
@@ -194,7 +167,6 @@ function DrawerNavigator() {
   );
 }
 
-// Main App Component
 export default function App() {
   return (
     <>

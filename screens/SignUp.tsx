@@ -23,6 +23,7 @@ import Icon from "react-native-vector-icons/Ionicons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Footer from "../components/Footer";
 import { your_json_url } from "../utils/url";
+import RadioGroup from "react-native-radio-buttons-group";
 
 const registerSchema = z.object({
   name: z.string().min(1, "Full Name is required"),
@@ -34,7 +35,8 @@ const registerSchema = z.object({
     .regex(/^[0-9]+$/, "Phone number must contain only digits"),
     skills: z.string().optional(),
     workExperience: z.string().optional(),
-    education: z.string().optional()
+    education: z.string().optional(),
+    role: z.enum(['jobseeker', 'employer'], { required_error: "Role is required" }),
 });
 
 type RegisterFormData = z.infer<typeof registerSchema>;
@@ -97,6 +99,11 @@ const SignUp: React.FC = () => {
       console.error("Error:", errorMessage);
     }
   };
+
+  const roleOptions = [
+    { id: 'jobseeker', label: 'Job Seeker', value: 'jobseeker' },
+    { id: 'employer', label: 'Employer', value: 'employer' },
+  ];
 
   return (
     <>
@@ -232,6 +239,26 @@ const SignUp: React.FC = () => {
         )}
       />
 
+          <Controller
+          control={control}
+          name="role"
+          render={({ field: { onChange, value } }) => (
+            <View style={styles.radioContainer}>
+              <Text style={styles.radioLabel}>I am a:</Text>
+              <RadioGroup
+                radioButtons={roleOptions}
+                onPress={(selectedId) => onChange(selectedId)}
+                selectedId={value}
+                layout="row"
+              />
+              {errors.role && (
+                <Text style={styles.errorText}>{errors.role.message}</Text>
+              )}
+            </View>
+          )}
+        />
+
+
       {/* Custom Button for Registration */}
       <CustomButton
         text={isSubmitting ? "Submitting..." : "Register"}
@@ -304,6 +331,15 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     justifyContent: "center",
   },
+  radioContainer: {
+    marginBottom: 20,
+    alignItems: 'center',
+  },
+  radioLabel: {
+    fontSize: 16,
+    marginBottom: 10,
+    color: colors.text,
+  }
 });
 
 export default SignUp;

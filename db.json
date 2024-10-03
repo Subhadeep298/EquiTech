@@ -9,6 +9,28 @@
       "education": "Enanmjjbobi",
       "password": "123123",
       "id": "c83c"
+    },
+    {
+      "id": "de99",
+      "name": "Subha ",
+      "email": "s1@gmail.com",
+      "password": "123123",
+      "phoneNumber": "5857512345",
+      "role": "jobseeker",
+      "education": "",
+      "skills": "",
+      "workExperience": ""
+    },
+    {
+      "id": "b771",
+      "name": "Manab",
+      "email": "m@gmail.com",
+      "password": "123123",
+      "phoneNumber": "8571452541",
+      "role": "employer",
+      "education": "",
+      "skills": "",
+      "workExperience": ""
     }
   ],
   "jobs": [

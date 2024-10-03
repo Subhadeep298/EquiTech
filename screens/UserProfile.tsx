@@ -29,7 +29,7 @@ const schema = z.object({
   skills: z.string().min(1, { message: "Skills are required" }),
   workExperience: z.string().min(1, { message: "Work experience is required" }),
   education: z.string().min(1, { message: "Education is required" }),
-password: z.string().min(1, { message: "Password is required" }),
+  password: z.string().min(1, { message: "Password is required" }),
 });
 
 const passwordSchema = z.object({

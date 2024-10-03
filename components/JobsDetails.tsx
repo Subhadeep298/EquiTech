@@ -19,7 +19,7 @@ interface JobDetailsModalProps {
 const JobDetailsModal: React.FC<JobDetailsModalProps> = ({ jobData, isVisible, onClose }) => {
   const navigation = useNavigation<any>();
   const [isApplicationModalVisible, setIsApplicationModalVisible] = useState(false);
-  const { user, isAuthenticated, applyToJob, hasAppliedToJob } = useAuthStore();
+  const { user, isAuthenticated, applyToJob, hasAppliedToJob,isJobSeeker } = useAuthStore();
   const userId = user?.id; // Extract user.id from Zustand
 
   const handleApplyNow = () => {
@@ -60,7 +60,7 @@ const JobDetailsModal: React.FC<JobDetailsModalProps> = ({ jobData, isVisible, o
     onClose();
     navigation.navigate('Drawer', { screen: 'Login',params:{goBack:"true"}});
   }
-  const isAlreadyApplied = hasAppliedToJob(jobData.id);
+  const isAlreadyApplied = hasAppliedToJob(jobData.id) ;
 
   return (
   <Modal visible={isVisible} animationType="fade">
@@ -109,35 +109,45 @@ const JobDetailsModal: React.FC<JobDetailsModalProps> = ({ jobData, isVisible, o
         <View style={styles.buttonContainer}>
         
         <View style={styles.buttonContainer}>
-            {isAuthenticated ? (
-              isAlreadyApplied ? (
-                <CustomButton
-                  text="Already Applied"
-                  color="gray"
-                  borderColor="gray"
-                  textColor={colors.primary}
-                  onPress={() => alert('You have already applied to this job.')}
-                  disabled={true} // Disable the button if already applied
-                />
-              ) : (
-                <CustomButton
-                  text="Apply Now"
-                  color={colors.secondary}
-                  borderColor={colors.secondary}
-                  textColor={colors.primary}
-                  onPress={handleApplyNow}
-                />
-              )
+        {isAuthenticated ? (
+          isJobSeeker ? (
+            isAlreadyApplied ? (
+              <CustomButton
+                text="Already Applied"
+                color="gray"
+                borderColor="gray"
+                textColor={colors.primary}
+                onPress={() => alert('You have already applied to this job.')}
+                disabled={true}
+              />
             ) : (
               <CustomButton
-                text="Login to Apply"
+                text="Apply Now"
                 color={colors.secondary}
                 borderColor={colors.secondary}
                 textColor={colors.primary}
-                onPress={handleLoginRedirect}
+                onPress={handleApplyNow}
               />
-            )}
-
+            )
+          ) : (
+            <CustomButton
+              text="You are an Employer"
+              color="gray"
+              borderColor="gray"
+              textColor={colors.primary}
+              onPress={() => alert('As an employer, you cannot apply for jobs.')}
+              disabled={true}
+            />
+          )
+        ) : (
+          <CustomButton
+            text="Login to Apply"
+            color={colors.secondary}
+            borderColor={colors.secondary}
+            textColor={colors.primary}
+            onPress={handleLoginRedirect}
+          />
+        )}
             <CustomButton
               text="Close"
               color={colors.primary}

@@ -35,7 +35,7 @@ type SignInScreenNavigationProp = NativeStackNavigationProp<any>;
 
 const SignIn: React.FC = () => {
   const navigation = useNavigation<SignInScreenNavigationProp>();
-  const { login } = useAuthStore(); // Get Zustand state and actions
+  const { login,setIsJobSeeker } = useAuthStore(); // Get Zustand state and actions
 
   const [focusedField, setFocusedField] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -73,7 +73,10 @@ const SignIn: React.FC = () => {
           workExperience: user.workExperience,
           education: user.education,
           password: user.password,
+          role: user.role,
         });
+        if(user.role==="jobseeker")
+          setIsJobSeeker(true);
         navigation.reset({
           index: 0,
           routes: [{ name: "Home" }], // Set Home as the new initial route
@@ -182,7 +185,7 @@ const SignIn: React.FC = () => {
         <Text style={styles.loginText}>Don't have an account? Go to Sign Up</Text>
       </Pressable>
     </ScrollView>
-          <Footer />
+    <Footer />
 </>
 
   );
