@@ -84,7 +84,6 @@ const SignUp: React.FC = () => {
     data.workExperience="";
     try {
       const response = await axios.post(`http://${your_json_url}/users`, data);
-
       if (response.status === 201) {
         console.log("User registered:", response.data[0]);
        navigation.navigate("Drawer",{screen: "Login"});

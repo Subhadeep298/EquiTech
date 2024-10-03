@@ -55,8 +55,9 @@ const SignIn: React.FC = () => {
 
   const onSubmit: SubmitHandler<LoginFormData> = async (data) => {
     try {
+      
       const response = await axios.get(
-        `http://${your_json_url}/users?email=${data.email}`
+        `http://${your_json_url}/users?email=${data.email.toLowerCase()}`
       );
       const user = response.data[0];
       if (response.data.length > 0 && user.password === data.password) {
@@ -71,6 +72,7 @@ const SignIn: React.FC = () => {
           skills: user.skills,
           workExperience: user.workExperience,
           education: user.education,
+          password: user.password,
         });
         navigation.reset({
           index: 0,

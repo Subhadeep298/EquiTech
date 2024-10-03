@@ -32,7 +32,7 @@ export default function Main({ navigation }: MainProps) {
       return () => {
         // Any cleanup code can go here if necessary
       };
-    }, [loadUser, navigation]) // Add isAuthenticated and navigation as dependencies
+    }, [loadUser, navigation,isAuthenticated]) // Add isAuthenticated and navigation as dependencies
   );
     
   return (

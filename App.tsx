@@ -45,7 +45,7 @@ function DrawerNavigator() {
 
   useEffect(() => {
     loadUser(); // Load user data when the app starts
-  }, [loadUser]);
+  }, [loadUser,isAuthenticated]);
 
   return (
     <Drawer.Navigator

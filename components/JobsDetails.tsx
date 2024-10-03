@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Modal, View, Text, StyleSheet, ScrollView, SafeAreaView } from "react-native";
 import CustomButton from "../components/CustomButtons";
 import colors from "../utils/colors";
@@ -25,6 +25,10 @@ const JobDetailsModal: React.FC<JobDetailsModalProps> = ({ jobData, isVisible, o
   const handleApplyNow = () => {
     setIsApplicationModalVisible(true);
   };
+
+  useEffect(()=>{
+    
+  })
 
   const handleApplicationSubmit = async (resumeUri: string, coverLetterUri: string) => {
     try {

@@ -30,7 +30,7 @@ const AppliedJobs: React.FC = () => {
         const applicationsResponse = await axios.get(`http://${your_json_url}/jobApplications`);
         const allApplications: any[] = applicationsResponse.data;
         const userApplications = allApplications.filter(app => 
-          app.applicants.some(applicant => applicant.userId === user.id)
+          app.applicants.some((applicant: { userId: string; }) => applicant.userId === user.id)
         );
 
         // Fetch all jobs
