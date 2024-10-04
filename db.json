@@ -254,28 +254,6 @@
       "jobOpenings": 3,
       "employmentType": "Full-time",
       "postedTime": "5 days ago"
-    },
-    {
-      "id": "12",
-      "jobTitle": "Personal ",
-      "companyName": "Virtusaaaa",
-      "location": "Shdjisns",
-      "jobPay": "7299288584",
-      "employmentType": "Part-time",
-      "postedTime": "2024-09-30T22:23:38.176Z",
-      "jobDescription": "Subhadeep Banerjee ",
-      "keySkills": [
-        "Hsjaj",
-        "hsisos"
-      ],
-      "jobType": "Part-time",
-      "companyInfo": "Best ",
-      "hiringTrendsForWomen": "Hii",
-      "companyCultureTowardsWomen": "Block",
-      "benefitsForWomen": "Sjsjaiaisn",
-      "workMode": "Hybrid",
-      "jobOpenings": 5,
-      "postedBy": "d9eb"
     }
   ],
   "jobApplications": [
@@ -303,17 +281,6 @@
           "userId": "de99",
           "resumeUri": "file:///data/user/0/host.exp.exponent/cache/DocumentPicker/40b5c96d-1ab9-4dca-824e-08a7358ab75e.pdf",
           "coverLetterUri": "file:///data/user/0/host.exp.exponent/cache/DocumentPicker/5a31e652-c63d-4692-9f7e-2ab51b021f5f.pdf"
-        }
-      ]
-    }
-  ],
-  "userAppliedJobs": [
-    {
-      "id": "",
-      "userId": "",
-      "jobs": [
-        {
-          "jobId": ""
         }
       ]
     }

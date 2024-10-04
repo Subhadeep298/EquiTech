@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { your_json_url } from '../utils/url';
+import { JobData } from '../utils/types';
 
 interface User {
   id: string;
@@ -20,6 +21,7 @@ interface AuthState {
   user: User | null;
   appliedJobs: string[];
   isJobSeeker: boolean;
+  jobPosted: boolean;
   login: (user: User) => Promise<void>;
   logout: () => Promise<void>;
   loadUser: () => Promise<void>;
@@ -28,6 +30,8 @@ interface AuthState {
   setUser: (user: User) => void;
   setIsJobSeeker: (isJobSeeker: boolean) => Promise<void>;
   fetchAppliedJobs: (userId: string) => Promise<void>;
+  postJob: (JobData: any)=> any;
+  resetJobPosted: () => any;
 }
 
 export const useAuthStore = create<AuthState>((set, get) => ({
@@ -35,7 +39,26 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   user: null,
   appliedJobs: [],
   isJobSeeker: false, // Default to true, can be changed later
-  
+  jobPosted: false,
+
+  // Method to trigger when a job is successfully posted
+  postJob: async (jobData: any) => {
+    try {
+      const response = await axios.post(`http://${your_json_url}/jobs`, jobData);
+
+      if (response.status === 201) {
+        set({ jobPosted: true }); // Set jobPosted to true when job is successfully posted
+        console.log('Job posted successfully!');
+        return response;
+      }
+    } catch (error) {
+      console.error('Error posting job:', error);
+    }
+  },
+
+  resetJobPosted: () => {
+    set({ jobPosted: false }); // Reset jobPosted to false after refreshing jobs
+  },
   login: async (user: User) => {
     const isJobSeeker = user.role === 'jobseeker';
     

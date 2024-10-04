@@ -9,6 +9,7 @@ import colors from '../utils/colors';
 import JobDetailsModal from '../components/JobsDetails'; // Import your modal component
 import { your_json_url } from '../utils/url';
 import { JobData } from '../utils/types';
+import { useAuthStore } from '../stores/authStore';
 
 
 const Home: React.FC = () => {
@@ -21,6 +22,8 @@ const Home: React.FC = () => {
   const [selectedJob, setSelectedJob] = useState<JobData | null>(null);
   const [keywordSearch, setKeywordSearch] = useState('');
   const [locationSearch, setLocationSearch] = useState('');
+  const { jobPosted, resetJobPosted } = useAuthStore(); // Access jobPosted and reset function from zustand
+
 
   const fetchJobs = async () => {
     try {
@@ -37,7 +40,10 @@ const Home: React.FC = () => {
 
   useEffect(() => {
     fetchJobs();
-  }, []);
+    if (jobPosted) {
+      resetJobPosted(); // Reset jobPosted after fetching jobs
+    }
+  }, [jobPosted]); // Dependency on jobPosted
 
   useEffect(() => {
     const filtered = jobs.filter(job => {

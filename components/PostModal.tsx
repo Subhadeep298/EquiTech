@@ -22,16 +22,14 @@ const jobPostSchema = z.object({
   jobTitle: z.string().min(2, { message: "Job title is required" }).optional(),
   jobDescription: z
     .string()
-    .min(5, { message: "Job description is required" })
-    .optional(),
+    .min(2, { message: "Job description is required" }),
   companyName: z
     .string()
     .min(2, { message: "Company name is required" })
     .optional(),
   companyInfo: z
     .string()
-    .min(5, { message: "Company info is required" })
-    .optional(),
+    .min(2, { message: "Company info is required" }),
   hiringTrendsForWomen: z.string().optional(),
   companyCultureTowardsWomen: z.string().optional(),
   benefitsForWomen: z.string().optional(),
@@ -60,7 +58,7 @@ const JobPostForm: React.FC<JobPostModalProps> = ({ visible, onClose }) => {
   const [workMode, setWorkMode] = useState("");
   const [focusedField, setFocusedField] = useState<string | null>(null);
 
-  const { user } = useAuthStore();
+  const { user,postJob } = useAuthStore();
   const userId = user?.id; // Extract user.id from Zustand
 
   const {
@@ -102,8 +100,7 @@ const JobPostForm: React.FC<JobPostModalProps> = ({ visible, onClose }) => {
   
     try {
       // Step 3: Make an API call to post the job using axios
-      const response = await axios.post(`http://${your_json_url}/jobs`, jobData);
-  
+      const response = await postJob(jobData);
       if (response.status === 201) {
         // Step 4: Reset the form fields if the post was successful
         reset(); // Resets the form fields
