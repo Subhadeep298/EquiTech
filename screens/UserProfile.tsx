@@ -162,7 +162,6 @@ const UserProfile = () => {
       try {
         const response = await axios.put(`http://${your_json_url}/users/${user.id}`, {
           ...data,
-          ...userData, // Spread all existing fields (including role)
           password: userData?.password, // Preserve the existing password
         });
 
@@ -172,6 +171,8 @@ const UserProfile = () => {
           setUser(response.data);
           setIsEditing(false);
           resetPassword();
+          console.log(userData);
+          console.log(user);
         }
       } catch (error) {
         console.error("Failed to update profile:", error);

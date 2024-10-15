@@ -19,19 +19,28 @@ interface JobDetailsModalProps {
 const JobDetailsModal: React.FC<JobDetailsModalProps> = ({ jobData, isVisible, onClose }) => {
   const navigation = useNavigation<any>();
   const [isApplicationModalVisible, setIsApplicationModalVisible] = useState(false);
-  const { user, isAuthenticated, applyToJob, hasAppliedToJob,isJobSeeker,fetchAppliedJobs } = useAuthStore();
+  const [isAlreadyApplied, setIsAlreadyApplied] = useState(false); // State to track if the user has applied
+
+  const { user, isAuthenticated, applyToJob, hasAppliedToJob, isJobSeeker, fetchAppliedJobs } = useAuthStore();
   const userId = user?.id; // Extract user.id from Zustand
+
+  useEffect(() => {
+    const checkJobApplication = async () => {
+      if (userId) {
+        // Fetch the latest applied jobs and check if the user has already applied
+        await fetchAppliedJobs(userId);
+        const alreadyApplied = hasAppliedToJob(jobData.id);
+        setIsAlreadyApplied(alreadyApplied); // Update state with result
+        console.log("new");
+      }
+    };
+
+    checkJobApplication();
+  }, [userId, jobData.id]); // Re-run when `userId` or `jobData.id` changes
 
   const handleApplyNow = () => {
     setIsApplicationModalVisible(true);
   };
-
-  useEffect(() => {
-    if (userId) {
-      // Fetch applied jobs again when the modal opens
-      useAuthStore.getState().fetchAppliedJobs(userId);
-    }
-  }, [userId]);
 
   const handleApplicationSubmit = async (resumeUri: string, coverLetterUri: string) => {
     try {
@@ -53,6 +62,8 @@ const JobDetailsModal: React.FC<JobDetailsModalProps> = ({ jobData, isVisible, o
       applyToJob(jobData.id); // Update applied jobs in Zustand
       setIsApplicationModalVisible(false);
       alert('Application submitted successfully!');
+      onClose();
+      navigation.navigate('Drawer', { screen: 'Home'});
     } catch (error) {
       console.error('Error submitting application:', error);
       alert('Failed to submit application. Please try again.');
@@ -61,10 +72,9 @@ const JobDetailsModal: React.FC<JobDetailsModalProps> = ({ jobData, isVisible, o
 
   const handleLoginRedirect = () => {
     onClose();
-    navigation.navigate('Drawer', { screen: 'Login',params:{goBack:"true"}});
-  }
-  const isAlreadyApplied = hasAppliedToJob(jobData.id) ;
-
+    navigation.navigate('Drawer', { screen: 'Login', params: { goBack: "true" } });
+  };
+  
   return (
   <Modal visible={isVisible} animationType="fade">
     <StatusBar backgroundColor="#F0F8FF"/>

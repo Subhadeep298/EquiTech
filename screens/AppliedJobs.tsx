@@ -11,7 +11,7 @@ import { useNavigation } from '@react-navigation/native';
 
 const AppliedJobs: React.FC = () => {
   const navigation = useNavigation<any>();
-  const { user, isAuthenticated,appliedJobs } = useAuthStore();
+  const { user, isAuthenticated,hasAppliedToJob,fetchAppliedJobs } = useAuthStore();
   const [jobs, setJobs] = useState<JobData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -19,26 +19,22 @@ const AppliedJobs: React.FC = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   useEffect(() => {
-    const fetchAppliedJobs = async () => {
+    const loadAppliedJobs = async () => {
       if (!isAuthenticated || !user) {
         setLoading(false);
         return;
       }
 
       try {
-        // Fetch job applications for the current user
-        const applicationsResponse = await axios.get(`http://${your_json_url}/jobApplications`);
-        const allApplications: any[] = applicationsResponse.data;
-        const userApplications = allApplications.filter(app => 
-          app.applicants.some((applicant: { userId: string; }) => applicant.userId === user.id)
-        );
+        // Fetch the applied jobs for the user using Zustand's fetchAppliedJobs function
+        await fetchAppliedJobs(user.id); // Fetches the applied jobs and updates the Zustand state
 
-        // Fetch all jobs
+        // Fetch all jobs from the API
         const jobsResponse = await axios.get(`http://${your_json_url}/jobs`);
         const allJobs: JobData[] = jobsResponse.data;
 
-        const appliedJobIds = userApplications.map(app => app.jobId);
-        const filteredJobs = allJobs.filter(job => appliedJobIds.includes(job.id));
+        // Filter jobs based on the applied job IDs stored in the Zustand state
+        const filteredJobs = allJobs.filter(job => hasAppliedToJob(job.id));
 
         setJobs(filteredJobs);
       } catch (error) {
@@ -49,8 +45,8 @@ const AppliedJobs: React.FC = () => {
       }
     };
 
-    fetchAppliedJobs();
-  }, [isAuthenticated, user,appliedJobs]);
+    loadAppliedJobs();
+  }, [isAuthenticated, user,jobs]);
 
   const handlePress = (job: JobData) => {
     setSelectedJob(job);

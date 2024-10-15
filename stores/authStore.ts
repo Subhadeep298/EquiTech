@@ -48,7 +48,6 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
       if (response.status === 201) {
         set({ jobPosted: true }); // Set jobPosted to true when job is successfully posted
-        console.log('Job posted successfully!');
         return response;
       }
     } catch (error) {
@@ -124,8 +123,12 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
   fetchAppliedJobs: async (userId: any) => {
     try {
-      const response = await axios.get(`http://${your_json_url}/jobApplications?applicants.userId=${userId}`);
-      const appliedJobs = response.data.map((jobApplication: any) => jobApplication.jobId);
+      const response = await axios.get(`http://${your_json_url}/jobApplications`);
+    const appliedJobs = response.data
+      .filter((jobApplication: any) => 
+        jobApplication.applicants.some((applicant: any) => applicant.userId === userId)
+      )
+      .map((jobApplication: any) => jobApplication.jobId);
       set({ appliedJobs });
     } catch (error) {
       console.error('Error fetching applied jobs:', error);

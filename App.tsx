@@ -27,7 +27,6 @@ function DrawerNavigator() {
   // Load user only once when component mounts
   useEffect(() => {
     loadUser();
-    console.log("is job seeker or not"+isJobSeeker);
   }, []);
 
   return (

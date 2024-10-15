@@ -62,7 +62,6 @@ const SignIn: React.FC = () => {
       const user = response.data[0];
       if (response.data.length > 0 && user.password === data.password) {
 
-        console.log("User signed in:", response.data[0]);
         // Store the user data in Zustand
         login({
           id: user.id,

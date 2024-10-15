@@ -11,7 +11,6 @@ const Logout = ({ navigation }: any) => {
 
   const handleLogout = async () => {
     logout();
-    console.log("bgibb");
     navigation.navigate('Main'); // Navigate to Home or any other screen after logout
   };
 

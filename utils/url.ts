@@ -1,1 +1,1 @@
-export const your_json_url = "192.168.29.65:3000";
+export const your_json_url = "192.168.1.7:3000";

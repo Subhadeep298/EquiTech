@@ -32,6 +32,28 @@
       "password": "123123",
       "role": "employer",
       "id": "b771"
+    },
+    {
+      "name": "Subhadeep Banerjee ",
+      "email": "subha@gmail.com",
+      "phoneNumber": "8617583078",
+      "skills": "React native ",
+      "workExperience": "2 years at virtusa ",
+      "education": "Btech",
+      "password": "123123",
+      "role": "jobseeker",
+      "id": "79fe"
+    },
+    {
+      "id": "75b3",
+      "name": "Manab Banerjee ",
+      "email": "manab@gmail.com",
+      "password": "123123",
+      "phoneNumber": "8617583807",
+      "role": "employer",
+      "education": "",
+      "skills": "",
+      "workExperience": ""
     }
   ],
   "jobs": [
@@ -254,33 +276,39 @@
       "jobOpenings": 3,
       "employmentType": "Full-time",
       "postedTime": "5 days ago"
+    },
+    {
+      "id": "5342",
+      "jobTitle": "React native ",
+      "companyName": "Virtusa ",
+      "location": "Hyderabad ",
+      "jobPay": "3300000",
+      "employmentType": "Part-time",
+      "postedTime": "2024-10-15T18:33:33.390Z",
+      "jobDescription": "HANDS ON EXPERIENCE ",
+      "keySkills": [
+        "React native",
+        " React "
+      ],
+      "jobType": "Part-time",
+      "companyInfo": "Company ",
+      "hiringTrendsForWomen": "Good",
+      "companyCultureTowardsWomen": "Good",
+      "benefitsForWomen": "A lot ",
+      "workMode": "Hybrid",
+      "jobOpenings": 10,
+      "postedBy": "75b3"
     }
   ],
   "jobApplications": [
     {
-      "id": "bfdc",
-      "jobId": "1",
+      "id": "8e9f",
+      "jobId": "4",
       "applicants": [
         {
-          "userId": "c83c",
-          "resumeUri": "file:///data/user/0/host.exp.exponent/cache/DocumentPicker/fe33888e-3225-4753-be97-3cf9ea79a630.pdf",
-          "coverLetterUri": "file:///data/user/0/host.exp.exponent/cache/DocumentPicker/914bb882-86f0-42f5-920e-4bc1ae613632.pdf"
-        },
-        {
-          "userId": "de99",
-          "resumeUri": "file:///data/user/0/host.exp.exponent/cache/DocumentPicker/a1592c63-e3c5-44f4-ac70-af172f735585.pdf",
-          "coverLetterUri": "file:///data/user/0/host.exp.exponent/cache/DocumentPicker/d28a6d47-612d-47f6-8059-7507ded480d4.pdf"
-        }
-      ]
-    },
-    {
-      "id": "6458",
-      "jobId": "2",
-      "applicants": [
-        {
-          "userId": "de99",
-          "resumeUri": "file:///data/user/0/host.exp.exponent/cache/DocumentPicker/40b5c96d-1ab9-4dca-824e-08a7358ab75e.pdf",
-          "coverLetterUri": "file:///data/user/0/host.exp.exponent/cache/DocumentPicker/5a31e652-c63d-4692-9f7e-2ab51b021f5f.pdf"
+          "userId": "79fe",
+          "resumeUri": "file:///data/user/0/host.exp.exponent/cache/DocumentPicker/fd9c2ce2-6376-4f16-a950-45353e689129.pdf",
+          "coverLetterUri": "file:///data/user/0/host.exp.exponent/cache/DocumentPicker/f477f65f-1c6d-4f97-b838-4b063941e45e.pdf"
         }
       ]
     }

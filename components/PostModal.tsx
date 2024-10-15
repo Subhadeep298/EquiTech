@@ -106,9 +106,7 @@ const JobPostForm: React.FC<JobPostModalProps> = ({ visible, onClose }) => {
         reset(); // Resets the form fields
         setJobType(""); // Clears job type picker
         setWorkMode(""); // Clears work mode picker
-  
-        console.log("Job posted successfully!");
-        handleClose(); // Closes the modal
+          handleClose(); // Closes the modal
       } else {
         console.error("Failed to post the job:", response.statusText);
       }
